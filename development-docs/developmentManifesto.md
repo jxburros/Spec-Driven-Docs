@@ -719,3 +719,35 @@ A short `developmentManifesto.md` can be complete with only:
 9. Definition of Done
 
 That minimum version keeps the manifesto short while preserving the important rule: **`architecture.md` should stay accurate, current, and authoritative when architecture changes.**
+
+
+## 7. Canonical Definition of Done
+**Status: Required for AI-agent-assisted repos**
+
+This is the canonical Definition of Done (DoD) for this repository.
+
+A task is done only when all applicable items are true:
+
+- Requested scope is implemented with the smallest safe change.
+- Relevant context docs were consulted (`coreIdentity`, manifesto, architecture, roadmap as applicable).
+- Validation was run when possible, and limitations are documented when not possible.
+- `CHANGELOG.md` was updated using the standardized agent identity format.
+- `README.md` was updated when setup/usage/configuration/public behavior changed.
+- `architecture.md` was updated when architecture changed.
+- `productRoadmap.md` was updated only for version-scope or product-direction changes.
+- Incomplete, blocked, or intentionally skipped work is recorded honestly.
+- Handover notes are captured when remaining context could help the next maintainer or agent.
+
+Other documents should reference this section instead of duplicating alternate completion checklists.
+
+## 8. Cross-Document Update Rules
+**Status: Required**
+
+To avoid duplicated and conflicting guidance, each document owns its own "when to update" rules:
+
+- `README.md` owns README update triggers.
+- `development-docs/architecture.md` owns architecture update triggers.
+- `development-docs/productRoadmap.md` owns roadmap update triggers.
+- `CHANGELOG.md` owns changelog entry and handover rules.
+
+Other docs should point to the target document instead of re-stating long duplicate rules.

@@ -2,7 +2,7 @@
 
 > **GitHub Copilot-specific overlay**
 >
-> GitHub Copilot must follow `AGENTS.md` first.
+> GitHub Copilot must follow `AGENTS.md` first, especially the Instruction Hierarchy in `AGENTS.md` Section 1.
 >
 > This file adds Copilot-specific guidance for code suggestions, edits, documentation updates, and completion behavior.
 
@@ -78,19 +78,21 @@ When scope is broad or open-ended, complete the requested scope thoroughly, but 
 
 ---
 
-## 4. Copilot Changelog Name  
+## 4. Copilot Changelog Name
+
+Use the standardized identity format from `AGENTS.md` Section 10 and `CHANGELOG.md`.  
 **Status: Usually keep**
 
 When GitHub Copilot updates `CHANGELOG.md`, use this agent name unless the maintainer requests another:
 
 ```text
-GitHub Copilot
+Agent: GitHub Copilot (Copilot)
 ```
 
 Preferred format:
 
 ```markdown
-## YYYY-MM-DD — GitHub Copilot
+## YYYY-MM-DD — Agent: GitHub Copilot (Copilot)
 
 ### Changed
 - ...
@@ -100,6 +102,11 @@ Preferred format:
 
 ### Notes
 - ...
+
+### Handover
+- Next agent should start with: ...
+- Open questions: ...
+- Risks or assumptions: ...
 ```
 
 If all requested work was completed:
@@ -173,7 +180,9 @@ When working on AI behavior:
 
 ---
 
-## 9. Completion Checklist  
+## 9. Completion Checklist
+
+Canonical DoD lives in `development-docs/developmentManifesto.md` Section 7. This local checklist is a quick aid only.  
 **Status: Usually keep**
 
 Before considering work complete:
