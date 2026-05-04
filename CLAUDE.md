@@ -2,7 +2,7 @@
 
 > **Claude-specific overlay**
 >
-> Claude must follow `AGENTS.md` first.
+> Claude must follow `AGENTS.md` first, especially the Instruction Hierarchy in `AGENTS.md` Section 1.
 >
 > This file adds Claude-specific expectations and should not contradict the canonical instructions in `AGENTS.md`.
 
@@ -66,19 +66,21 @@ After implementation:
 
 ---
 
-## 3. Claude Changelog Name  
+## 3. Claude Changelog Name
+
+Use the standardized identity format from `AGENTS.md` Section 10 and `CHANGELOG.md`.  
 **Status: Usually keep**
 
 When Claude updates `CHANGELOG.md`, use this agent name unless the maintainer requests another:
 
 ```text
-Claude
+Agent: Claude Code (Claude)
 ```
 
 Preferred format:
 
 ```markdown
-## YYYY-MM-DD — Claude
+## YYYY-MM-DD — Agent: Claude Code (Claude)
 
 ### Changed
 - ...
@@ -88,6 +90,11 @@ Preferred format:
 
 ### Notes
 - ...
+
+### Handover
+- Next agent should start with: ...
+- Open questions: ...
+- Risks or assumptions: ...
 ```
 
 If all requested work was completed:

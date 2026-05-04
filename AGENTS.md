@@ -4,7 +4,7 @@
 >
 > This is the primary instruction document for AI agents, coding assistants, automation tools, and human-assisted development agents working in this repository.
 >
-> Tool-specific files such as `CLAUDE.md` and `.github/copilot-instructions.md` should defer to this file unless they explicitly describe tool-specific behavior.
+> Tool-specific files such as `CLAUDE.md` and `.github/copilot-instructions.md` should defer to this file unless they explicitly describe tool-specific behavior. Those files must reference the Instruction Hierarchy in Section 1 instead of redefining it.
 
 ---
 
@@ -197,7 +197,58 @@ Use `CHANGELOG.md` for completed work. Use issue trackers for granular tasks. Us
 
 ---
 
-## 10. Changelog Rules  
+## 10. Changelog Rules
+**Status: Usually keep**
+
+Every meaningful development session must update `CHANGELOG.md` (exact uppercase filename).
+
+If `CHANGELOG.md` does not exist, create it.
+
+The changelog must be iterative and append-only.
+
+Never delete previous entries or rewrite history to hide incomplete work.
+
+### Standardized Agent Identity Format
+
+Use this heading format for all contributors and models:
+
+```markdown
+## YYYY-MM-DD — Agent: <Tool Name> (<Model Name>)
+```
+
+Examples:
+- `Agent: OpenAI Codex (GPT-5.3-Codex)`
+- `Agent: Claude Code (Claude)`
+- `Agent: GitHub Copilot (Copilot)`
+
+Use this body format unless the repository already has a clear changelog convention:
+
+```markdown
+### Changed
+- ...
+
+### Not completed
+- ...
+
+### Notes
+- ...
+
+### Handover
+- Next agent should start with: ...
+- Open questions: ...
+- Risks or assumptions: ...
+```
+
+If everything requested was completed, write:
+
+```markdown
+### Not completed
+- None.
+```
+
+Record incomplete, blocked, skipped, or unverified work honestly.
+
+## 11. README Rules  
 **Status: Usually keep**
 
 Every meaningful development session must update `CHANGELOG.md`.
@@ -327,6 +378,8 @@ Before finishing a task, confirm:
 - [ ] `development-docs/architecture.md` was updated if architecture changed.
 - [ ] `development-docs/productRoadmap.md` was updated only if version scope or product direction changed.
 - [ ] Any incomplete, blocked, or intentionally skipped work was documented.
+- [ ] Definition of Done from `development-docs/developmentManifesto.md` was satisfied or exceptions were documented.
+- [ ] `CHANGELOG.md` includes `Handover` notes when useful for the next agent.
 
 ---
 
