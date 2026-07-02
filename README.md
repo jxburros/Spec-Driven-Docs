@@ -24,6 +24,20 @@ Use this repo as a baseline template for spec-driven development governance:
 - Use `development-docs/productRoadmap.md` for version-level direction.
 - Use `CHANGELOG.md` for append-only change history and handoff notes.
 
+### Guides
+
+- `guides/human-guide.md` — how maintainers set up and customize the docs.
+- `guides/ai-guide.md` — how AI agents should read and use the docs.
+
+### Skills for AI agents
+
+The `skills/` directory contains two portable skills (Agent Skills `SKILL.md` format, usable by Claude Code and adaptable to any LLM tool):
+
+- `skills/spec-driven-development/` — for doing development work in a repo that uses these docs (what to read per task, hierarchy, workflow, Definition of Done).
+- `skills/spec-driven-docs-setup/` — for creating customized, complete versions of the docs for a repo from evidence in the repo, including which questions to ask the maintainer.
+
+See `skills/README.md` for installation instructions per tool.
+
 ## Configuration
 
 There is no runtime configuration. Configuration in this repository is policy-based and document-based:
