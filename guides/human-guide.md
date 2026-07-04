@@ -121,8 +121,9 @@ Copy both skill folders into the repository so AI agents can invoke them directl
 
 ```bash
 mkdir -p .claude/skills
-cp -r <path-to-spec-driven-docs>/skills/spec-driven-development .claude/skills/
-cp -r <path-to-spec-driven-docs>/skills/spec-driven-docs-setup .claude/skills/
+cp -r <path-to-spec-driven-docs>/skills/spec-driven-development \
+      <path-to-spec-driven-docs>/skills/spec-driven-docs-setup \
+      .claude/skills/
 ```
 
 If copying from the source repo isn't practical, create `.claude/skills/spec-driven-development/SKILL.md` and `.claude/skills/spec-driven-docs-setup/SKILL.md` and paste in the content from those files verbatim.
@@ -130,10 +131,10 @@ If copying from the source repo isn't practical, create `.claude/skills/spec-dri
 Add skill invocation instructions to your `AGENTS.md` Domain-Specific Rules or Custom Repo Instructions section:
 
 ```markdown
-When working in this repository, invoke the `spec-driven-development` skill before reading the development documents (`/spec-driven-development` in Claude Code, or read `.claude/skills/spec-driven-development/SKILL.md`). When asked to set up or update the Spec-Driven Docs, invoke the `spec-driven-docs-setup` skill.
+When working in this repository, invoke the `spec-driven-development` skill before reading the development documents. When asked to set up or update the Spec-Driven Docs, invoke the `spec-driven-docs-setup` skill.
 ```
 
-For non-Claude agents, also add a similar reference in the tool's instruction file (e.g., `.github/copilot-instructions.md` for GitHub Copilot).
+For each agent tool the team uses, add the tool-specific invocation method in that tool's instruction file (e.g., `/spec-driven-development` in `CLAUDE.md` for Claude Code, or a path reference in `.github/copilot-instructions.md` for GitHub Copilot).
 
 ### Step 9: Update README.md
 
@@ -185,8 +186,9 @@ After completing the agent files, install both skills so AI agents can invoke th
 
 ```bash
 mkdir -p .claude/skills
-cp -r <path-to-spec-driven-docs>/skills/spec-driven-development .claude/skills/
-cp -r <path-to-spec-driven-docs>/skills/spec-driven-docs-setup .claude/skills/
+cp -r <path-to-spec-driven-docs>/skills/spec-driven-development \
+      <path-to-spec-driven-docs>/skills/spec-driven-docs-setup \
+      .claude/skills/
 ```
 
 Add skill invocation instructions to `AGENTS.md` (see Step 8 above for the exact text). This ensures future agents working in the repo use the skills immediately rather than relying only on the governance documents.
