@@ -115,7 +115,27 @@ For Copilot: Fill in the "Custom Copilot Instructions" section of `.github/copil
 
 If you don't use one of these agents, you can leave the file empty or delete it.
 
-### Step 8: Update README.md
+### Step 8: Install the skills for AI agents
+
+Copy both skill folders into the repository so AI agents can invoke them directly:
+
+```bash
+mkdir -p .claude/skills
+cp -r <path-to-spec-driven-docs>/skills/spec-driven-development .claude/skills/
+cp -r <path-to-spec-driven-docs>/skills/spec-driven-docs-setup .claude/skills/
+```
+
+If copying from the source repo isn't practical, create `.claude/skills/spec-driven-development/SKILL.md` and `.claude/skills/spec-driven-docs-setup/SKILL.md` and paste in the content from those files verbatim.
+
+Add skill invocation instructions to your `AGENTS.md` Domain-Specific Rules or Custom Repo Instructions section:
+
+```markdown
+When working in this repository, invoke the `spec-driven-development` skill before reading the development documents (`/spec-driven-development` in Claude Code, or read `.claude/skills/spec-driven-development/SKILL.md`). When asked to set up or update the Spec-Driven Docs, invoke the `spec-driven-docs-setup` skill.
+```
+
+For non-Claude agents, also add a similar reference in the tool's instruction file (e.g., `.github/copilot-instructions.md` for GitHub Copilot).
+
+### Step 9: Update README.md
 
 Replace the template README with a genuine project README. It should cover:
 - What the project does
@@ -124,7 +144,7 @@ Replace the template README with a genuine project README. It should cover:
 - Key commands
 - Known limitations
 
-### Step 9: Initialize CHANGELOG.md
+### Step 10: Initialize CHANGELOG.md
 
 Add an initial entry recording who set up the project and what was filled in.
 
@@ -158,6 +178,18 @@ Encode your existing team standards in developmentManifesto.md. Put current work
 **Phase 5 (Add agent files last)**
 
 AGENTS.md and the tool-specific files should be the last things you fill in, because they reference everything else. Writing them last means you can reference your actual documents rather than placeholders.
+
+**Phase 6 (Install the skills)**
+
+After completing the agent files, install both skills so AI agents can invoke them directly:
+
+```bash
+mkdir -p .claude/skills
+cp -r <path-to-spec-driven-docs>/skills/spec-driven-development .claude/skills/
+cp -r <path-to-spec-driven-docs>/skills/spec-driven-docs-setup .claude/skills/
+```
+
+Add skill invocation instructions to `AGENTS.md` (see Step 8 above for the exact text). This ensures future agents working in the repo use the skills immediately rather than relying only on the governance documents.
 
 ### What to do when you can't fill everything in
 

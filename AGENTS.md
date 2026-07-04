@@ -85,46 +85,33 @@ If a referenced document is missing, proceed with the available context, but doc
 ---
 
 ## 5. Project Summary  
-**Status: Customize**
 
-[Project Name] is a [brief description of the repository].
+Spec-Driven-Docs is a documentation-first governance framework and template repository for AI-assisted and human-led software projects.
 
-It exists to [primary purpose].
+It exists to give AI coding agents accurate, structured, hierarchical context about any project — replacing inference with explicit documents that define what the project is, how it should be built, and where it is going.
 
-The project should help [target users / maintainers / developers] by [core value].
+The project should help maintainers, developers, and AI agents by providing ready-to-use document templates and portable skills, especially when AI coding assistants are active contributors to a repo.
 
 Important project context:
 
-- [Context item 1]
-- [Context item 2]
-- [Context item 3]
-- [Context item 4]
+- The documents in `development-docs/` are intentionally templates containing placeholder text — they are the product this repo distributes, not completed governance documents for this repo itself.
+- This repo is documentation-only: no application runtime, build artifact, or user-facing product.
+- The skills in `skills/` are portable and self-contained — they work when copied to any repo independently of the rest of this repo.
+- `guides/ai-guide.md` and `guides/human-guide.md` are the full reference companions to the two skills.
 
 Agents should keep the project aligned with `development-docs/coreIdentity.md`.
 
 ---
 
 ## 6. Non-Negotiable Project Values  
-**Status: Customize**
 
 Agents must preserve these values:
 
-- [Value 1]
-- [Value 2]
-- [Value 3]
-- [Value 4]
-- [Value 5]
-
-Examples:
-
-- Core functionality should remain usable without mandatory AI.
-- User data should remain local-first unless the user explicitly enables sync.
-- Generated reports should remain understandable without AI interpretation.
-- AI should assist rather than become the authority.
-- Configuration should be explicit, readable, and backward-compatible where practical.
-- Accessibility should remain a first-class product quality.
-- Automation should remain safe to run unattended.
-- Human review should remain part of important decision points.
+- **Template accuracy:** documents in `development-docs/` must remain useful templates — placeholder sections are intentional and must not be replaced with invented content.
+- **Skill portability:** the two skills in `skills/` must remain self-contained and work when copied to any repo without this repo's supporting files.
+- **Document consistency:** when a skill or guide changes, all referencing files must be updated in the same change. Skills and guides are pairs; keep them in sync.
+- **No runtime dependencies:** do not add build steps, application infrastructure, or runtime configuration to this repo.
+- **Honest uncertainty:** never fill a template placeholder with invented content — use an explanatory comment to mark what is unknown.
 
 If a requested change conflicts with these values, identify the conflict before implementing.
 
@@ -339,16 +326,24 @@ When working with AI-related code, prompts, model configuration, generated analy
 ---
 
 ## 15. Domain-Specific Rules  
-**Status: Customize**
 
-Use this section for rules that are specific to this repository’s domain.
+### Skill Usage
 
-### Custom Repo Rules
+When working in this repository:
 
-- [Repo-specific rule 1]
-- [Repo-specific rule 2]
-- [Repo-specific rule 3]
-- [Repo-specific rule 4]
+- **Before reading the development documents, invoke the `spec-driven-development` skill.** For Claude Code: run `/spec-driven-development` at the start of the session. For other agents: read `skills/spec-driven-development/SKILL.md` before consulting the governance documents.
+- When asked to set up Spec-Driven Docs in another repository: invoke the `spec-driven-docs-setup` skill (`/spec-driven-docs-setup` in Claude Code, or read `skills/spec-driven-docs-setup/SKILL.md`). The setup skill includes steps to copy and install both skills in the target repo — complete those steps.
+
+### Template Rules
+
+- Status labels (`**Status: Required**`, `**Status: Customize**`, etc.) in the template files are part of the template format — do not remove or alter them.
+- Placeholder text in brackets (`[Project Name]`, `[Rule 1]`, etc.) is intentional template content. Never replace it with invented content in the source template files.
+- When editing a template, preserve the "How to Use This Template" section at the top — new adopters rely on it.
+
+### Skill and Guide Sync
+
+- `skills/spec-driven-development/SKILL.md` corresponds to `guides/ai-guide.md`. Changes to one must be reflected in the other.
+- `skills/spec-driven-docs-setup/SKILL.md` corresponds to `guides/human-guide.md`. Changes to one must be reflected in the other.
 
 ---
 
@@ -393,37 +388,36 @@ Do not hide limitations. Do not claim validation was performed if it was not.
 ---
 
 ## 19. Custom Repo Instructions  
-**Status: Customize**
 
 ### Important Commands
 
 ```bash
-[install command]
-[test command]
-[build command]
-[lint command]
-[dev command]
+npm install     # install test dependencies
+npm test        # smoke tests: required files present, markdown links resolve
 ```
 
 ### Important Paths
 
 | Path | Purpose |
 |---|---|
-| `[path]` | `[purpose]` |
-| `[path]` | `[purpose]` |
-| `[path]` | `[purpose]` |
+| `skills/spec-driven-development/SKILL.md` | Portable skill for development work in any repo using Spec-Driven Docs |
+| `skills/spec-driven-docs-setup/SKILL.md` | Portable skill for setting up Spec-Driven Docs in a new or existing repo |
+| `skills/README.md` | Installation instructions for each skill per agent tool |
+| `development-docs/` | Template documents — intentionally contain placeholders |
+| `guides/ai-guide.md` | Full AI agent reference (corresponds to `spec-driven-development` skill) |
+| `guides/human-guide.md` | Full human setup guide (corresponds to `spec-driven-docs-setup` skill) |
 
 ### Known Gotchas
 
-- [Gotcha 1]
-- [Gotcha 2]
-- [Gotcha 3]
+- The `development-docs/` files are intentionally filled with placeholders — agents must not replace them with invented content.
+- Editing SKILL.md files requires corresponding updates to the guides, and vice versa. Always check both when changing either.
+- `npm test` checks required file presence and link resolution; run it after moving or renaming any file.
+- `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` in this repo are both templates (meant to be copied) and live governance documents — they contain "How to Use This Template" guidance alongside real operating instructions.
 
 ### Maintainer Preferences
 
-- [Preference 1]
-- [Preference 2]
-- [Preference 3]
+- Keep the `spec-driven-development` and `spec-driven-docs-setup` skills in sync with `guides/ai-guide.md` and `guides/human-guide.md` respectively.
+- When adding a new feature to the doc system, update both the skill and the guide for that feature in the same commit.
 
 ---
 

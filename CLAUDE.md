@@ -22,6 +22,11 @@ Do not duplicate all of `AGENTS.md` unless this repository needs Claude to see t
 ## 1. Required Reading  
 **Status: Usually keep**
 
+Before starting any development work in this repository:
+
+- **Claude Code:** invoke `/spec-driven-development` to load the development skill. Do this before reading the governance documents below.
+- When asked to set up Spec-Driven Docs in another repository: invoke `/spec-driven-docs-setup`. The skill includes steps to install both skills in the target repo — complete those steps.
+
 Before making meaningful changes, Claude must:
 
 1. Read and follow `AGENTS.md`.
@@ -158,33 +163,31 @@ When reporting completion, Claude should include what changed, which files chang
 ---
 
 ## 8. Custom Claude Instructions  
-**Status: Customize**
 
 ### Project-Specific Claude Rules
 
-- [Rule 1]
-- [Rule 2]
-- [Rule 3]
+- Invoke `/spec-driven-development` at the start of each development session in this repo, before reading the governance documents.
+- When asked to set up Spec-Driven Docs in another repo, invoke `/spec-driven-docs-setup`. The skill includes steps to install both skills in the target repo — complete those steps.
+- Treat `development-docs/` files as templates: never replace placeholder text with invented content.
+- When editing a skill (`SKILL.md`), check the corresponding guide (`guides/ai-guide.md` or `guides/human-guide.md`) for sections that should be updated to match, and update them in the same change.
 
 ### Claude Should Prioritize
 
-- [Priority 1]
-- [Priority 2]
-- [Priority 3]
+- Invoking the `spec-driven-development` skill at the start of work, before reading the development documents.
+- Keeping skills and guides in sync when either changes.
+- Preserving template placeholder markers and Status labels — they are the product.
 
 ### Claude Should Avoid
 
-- [Avoided behavior 1]
-- [Avoided behavior 2]
-- [Avoided behavior 3]
+- Filling template placeholders in `development-docs/` with invented content.
+- Editing a skill without checking the corresponding guide, or vice versa.
+- Treating roadmap ideas in `productRoadmap.md` as approved implementation work.
 
 ### Important Repo Commands
 
 ```bash
-[install command]
-[test command]
-[build command]
-[lint command]
+npm install   # install test dependencies
+npm test      # smoke tests: required file presence and link resolution
 ```
 
 ---

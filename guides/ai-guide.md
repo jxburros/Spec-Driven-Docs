@@ -4,6 +4,26 @@ This guide is for AI coding agents (Claude, Copilot, Codex, and others) working 
 
 ---
 
+## Using the Skills
+
+This repo ships two portable skills that encode the most important guidance in this guide into a format AI agents can invoke directly. **Use the skill before reading the documents** — it is the fastest way to load the correct workflow for your task.
+
+**Before reading these documents**, invoke the development skill:
+
+- **Claude Code:** run `/spec-driven-development` at the start of your session.
+- **Other agents:** read `skills/spec-driven-development/SKILL.md` before consulting the governance documents.
+
+When asked to **set up Spec-Driven Docs in another repository**, use the setup skill:
+
+- **Claude Code:** run `/spec-driven-docs-setup`.
+- **Other agents:** read `skills/spec-driven-docs-setup/SKILL.md`.
+
+The setup skill includes a step to install both skills in the target repo — complete that step so future agents in that repo can also invoke them directly.
+
+See `skills/README.md` for installation instructions per tool.
+
+---
+
 ## The Core Principle
 
 This documentation system exists because AI agents fill gaps in their knowledge with plausible-sounding guesses. These documents eliminate the gaps. Your job is to read what's written, follow it, and not invent what isn't there.

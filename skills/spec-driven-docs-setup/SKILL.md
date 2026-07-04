@@ -80,9 +80,26 @@ Write them in this order, because later documents reference earlier ones:
 3. **`development-docs/architecture.md`** — describe **only what exists now**, from your Phase 1 evidence. Prioritize: Architecture Summary, Directory and File Map, Major Subsystems, data flow, external integrations, and Architectural Invariants. Leave unknown sections blank with a comment. Never write speculative or wished-for architecture.
 4. **`development-docs/productRoadmap.md`** — Current Product State (what exists), Current Version Focus, next version, Future Candidates, and especially Rejected / Out-of-Scope Directions, all from the user's Phase 2 answers. Keep it version-level; it is not a sprint board.
 5. **`AGENTS.md`** — keep the standard workflow/hierarchy sections; customize Project Summary, Non-Negotiable Project Values, Domain-Specific Rules, and Custom Repo Instructions (real commands, important paths, known gotchas). Write it last-but-one so it can reference the now-real documents.
-6. **Tool-specific overlays** (`CLAUDE.md`, `.github/copilot-instructions.md`, etc.) — fill the custom sections (rules, priorities, commands) for tools the team uses; delete or leave minimal the ones they don't. Overlays must defer to `AGENTS.md`, not duplicate it.
-7. **`README.md`** — ensure it covers what the project does, setup, usage, key commands, and known limitations. Update rather than replace if a real README exists.
-8. **`CHANGELOG.md`** — create if missing; append an entry (format below) recording the setup.
+6. **Install the skills** — copy both skill folders into the target repo so future agents can invoke them directly:
+
+   ```bash
+   mkdir -p .claude/skills
+   cp -r skills/spec-driven-development skills/spec-driven-docs-setup .claude/skills/
+   ```
+
+   If the Spec-Driven-Docs source repo is not locally available, create `.claude/skills/spec-driven-development/SKILL.md` and `.claude/skills/spec-driven-docs-setup/SKILL.md` and copy in the content from those files verbatim.
+
+   Then add skill invocation instructions to the target repo's `AGENTS.md` Domain-Specific Rules or Custom Repo Instructions section:
+
+   ```markdown
+   When working in this repository, invoke the `spec-driven-development` skill before reading the development documents (`/spec-driven-development` in Claude Code, or read `.claude/skills/spec-driven-development/SKILL.md`). When asked to set up or update the Spec-Driven Docs, invoke the `spec-driven-docs-setup` skill.
+   ```
+
+   For non-Claude tools, also add a similar reference in the tool's instruction file (e.g., `.github/copilot-instructions.md` for GitHub Copilot).
+
+7. **Tool-specific overlays** (`CLAUDE.md`, `.github/copilot-instructions.md`, etc.) — fill the custom sections (rules, priorities, commands) for tools the team uses; delete or leave minimal the ones they don't. Overlays must defer to `AGENTS.md`, not duplicate it.
+8. **`README.md`** — ensure it covers what the project does, setup, usage, key commands, and known limitations. Update rather than replace if a real README exists.
+9. **`CHANGELOG.md`** — create if missing; append an entry (format below) recording the setup.
 
 Finishing rules for every document:
 
@@ -105,6 +122,7 @@ Finishing rules for every document:
 
 ### Changed
 - Set up Spec-Driven Docs: customized coreIdentity, developmentManifesto, architecture, productRoadmap, AGENTS.md, [overlays].
+- Installed `spec-driven-development` and `spec-driven-docs-setup` skills in `.claude/skills/`.
 
 ### Not completed
 - [Sections intentionally left blank and why, or "None."]
