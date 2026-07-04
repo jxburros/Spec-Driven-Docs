@@ -20,6 +20,13 @@ For complete shared agent behavior, see `AGENTS.md`.
 ## 1. Required Context  
 **Status: Usually keep**
 
+Before starting any development work in this repository, invoke the `spec-driven-development` skill:
+
+- **Claude Code:** run `/spec-driven-development` before reading the development documents.
+- **Other agents:** read `skills/spec-driven-development/SKILL.md` at the start of the session.
+
+When asked to set up Spec-Driven Docs in another repository, use the `spec-driven-docs-setup` skill and complete the step in that skill to install both skills in the target repo.
+
 Before making meaningful changes, GitHub Copilot should follow `AGENTS.md`.
 
 At minimum:
@@ -209,36 +216,36 @@ When reporting completion, include what changed, files changed, whether `README.
 ---
 
 ## 11. Custom Copilot Instructions  
-**Status: Customize**
 
 ### Project-Specific Rules
 
-- [Rule 1]
-- [Rule 2]
-- [Rule 3]
+- Invoke the `spec-driven-development` skill (read `skills/spec-driven-development/SKILL.md`) before reading the development documents in any session.
+- When asked to set up Spec-Driven Docs in another repository, use the `spec-driven-docs-setup` skill (read `skills/spec-driven-docs-setup/SKILL.md`) and complete the step to install both skills in the target repo.
+- Treat `development-docs/` files as templates: never replace placeholder text with invented content.
+- When editing a SKILL.md file, check the corresponding guide and update it in the same change.
 
 ### Important Commands
 
 ```bash
-[install command]
-[test command]
-[build command]
-[lint command]
+npm install   # install test dependencies
+npm test      # smoke tests: required file presence and link resolution
 ```
 
 ### Important Paths
 
 | Path | Purpose |
 |---|---|
-| `[path]` | `[purpose]` |
-| `[path]` | `[purpose]` |
-| `[path]` | `[purpose]` |
+| `skills/spec-driven-development/SKILL.md` | Portable development-workflow skill |
+| `skills/spec-driven-docs-setup/SKILL.md` | Portable docs-setup skill |
+| `development-docs/` | Template documents — contain intentional placeholders |
+| `guides/ai-guide.md` | Full AI agent reference |
+| `guides/human-guide.md` | Full human setup guide |
 
 ### Known Gotchas
 
-- [Gotcha 1]
-- [Gotcha 2]
-- [Gotcha 3]
+- The `development-docs/` files are intentional templates — placeholder text must not be replaced with invented content.
+- Changing a skill requires checking the corresponding guide, and vice versa.
+- `npm test` checks file presence and link resolution; run it after moving or renaming files.
 
 ---
 

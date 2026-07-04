@@ -1,6 +1,31 @@
 # CHANGELOG
 
 
+## 2026-07-04 — Agent: GitHub Copilot (Copilot)
+
+### Changed
+- Updated `skills/spec-driven-docs-setup/SKILL.md`: added Phase 3 step 6 to copy both skills (`spec-driven-development` and `spec-driven-docs-setup`) into the target repo's `.claude/skills/` directory and add skill invocation instructions to that repo's `AGENTS.md`. Renumbered subsequent steps (tool overlays → 7, README → 8, CHANGELOG → 9). Updated the Phase 4 changelog template to include the skill installation line.
+- Updated `AGENTS.md`: filled placeholder sections 5 (Project Summary), 6 (Non-Negotiable Project Values), 15 (Domain-Specific Rules — Skill Usage, Template Rules, Skill and Guide Sync), and 19 (Custom Repo Instructions — real commands, paths, gotchas, maintainer preferences).
+- Updated `CLAUDE.md`: added skill invocation instructions at the top of Section 1 (Required Reading); filled Section 8 (Custom Claude Instructions) with project-specific rules, priorities, avoided behaviors, and commands.
+- Updated `.github/copilot-instructions.md`: added skill invocation instructions to Section 1 (Required Context); filled Section 11 (Custom Copilot Instructions) with project-specific rules, commands, paths, and gotchas.
+- Updated `guides/ai-guide.md`: added a "Using the Skills" section at the top (before "The Core Principle") instructing agents to invoke the `spec-driven-development` skill before reading the documents and the `spec-driven-docs-setup` skill when setting up docs in another repo.
+- Updated `guides/human-guide.md`: added Step 8 (Install the skills for AI agents) to the new-repo setup process, with copy commands and the exact `AGENTS.md` reference text; added Phase 6 (Install the skills) to the existing-repo adoption order.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: `npm test` was not run; this is a documentation-only change. All changes are to markdown files only.
+- The `development-docs/` template files were intentionally left as templates — they contain placeholder text by design.
+
+### Handover
+- Next agent should start with: invoking `/spec-driven-development` skill before reading the governance documents.
+- Open questions: whether to pre-install the skills under `.claude/skills/` in this repo itself (currently they live under `skills/` only).
+- Risks or assumptions: assumes `.claude/skills/` is the correct target directory for Claude Code skill installation; verify against latest Claude Code docs if the convention changes.
+
+---
+
+
 ## 2026-07-02 — Agent: Claude Code (Claude)
 
 ### Changed
