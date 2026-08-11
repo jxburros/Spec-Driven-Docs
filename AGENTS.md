@@ -253,41 +253,6 @@ If everything requested was completed, write:
 
 Record incomplete, blocked, skipped, or unverified work honestly.
 
-## 11. README Rules  
-**Status: Usually keep**
-
-Every meaningful development session must update `CHANGELOG.md`.
-
-If `CHANGELOG.md` does not exist, create it.
-
-The changelog must be iterative and append-only.
-
-Never delete previous entries or rewrite history to hide incomplete work.
-
-Use this format unless the repository already has a clear changelog convention:
-
-```markdown
-## YYYY-MM-DD — Agent Name
-
-### Changed
-- ...
-
-### Not completed
-- ...
-
-### Notes
-- ...
-```
-
-If everything requested was completed, write:
-
-```markdown
-### Not completed
-- None.
-```
-
-Record incomplete, blocked, skipped, or unverified work honestly.
-
 ---
 
 ## 11. README Rules  

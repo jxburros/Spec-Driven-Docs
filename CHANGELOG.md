@@ -1,6 +1,25 @@
 # CHANGELOG
 
 
+## 2026-08-11 — Agent: Claude Code (Claude)
+
+### Changed
+- Fixed a duplication bug in `AGENTS.md`: a leftover, mislabeled "## 11. README Rules" block (actually near-duplicate changelog instructions) sat between Section 10 (Changelog Rules) and the real Section 11 (README Rules), leaving two sections numbered 11. Removed the duplicate block; sections 1–19 now number correctly with no repeated content.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: ran `npm test` before and after the edit (4/4 passing) to confirm no links or required files broke.
+- Found while reviewing the governance system end-to-end at the maintainer's request; no other structural defects were identified in that review.
+
+### Handover
+- Next agent should start with: no open follow-up from this change.
+- Open questions: whether to reduce duplication across `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` — the three overlays restate most of the same tables/checklists rather than the overlays deferring to `AGENTS.md` as the project's own values (§6) call for. Flagged for the maintainer to decide; not changed here since it wasn't requested.
+- Risks or assumptions: None.
+
+---
+
 ## 2026-08-10 — Agent: OpenAI Codex (GPT-5)
 
 ### Changed
