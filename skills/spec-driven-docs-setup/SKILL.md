@@ -1,6 +1,6 @@
 ---
 name: spec-driven-docs-setup
-description: Create customized, complete versions of the Spec-Driven Docs (coreIdentity.md, developmentManifesto.md, architecture.md, productRoadmap.md, AGENTS.md, tool overlays, CHANGELOG.md, README.md) for a repository. Use when adopting the doc system in a new or existing repo, or when the docs still contain template placeholders. Fills templates from evidence already in the repo and asks the user targeted questions only where evidence cannot answer.
+description: Create customized, complete versions of the Spec-Driven Docs (coreIdentity.md, design.json placeholder, developmentManifesto.md, architecture.md, architecture-plans, research, productRoadmap.md, operational checklists, features.md, newFeatures.md, AGENTS.md, tool overlays, CHANGELOG.md, README.md) for a repository. Use when adopting the doc system in a new or existing repo, or when the docs still contain template placeholders. Fills templates from evidence already in the repo and asks the user targeted questions only where evidence cannot answer.
 ---
 
 # Spec-Driven Docs Setup
@@ -41,7 +41,7 @@ Record findings as you go; you will cite this evidence in the drafts and in your
 Also determine the starting state:
 
 - **Templates already copied in** (placeholders like `[Project Name]` present) → complete them in place.
-- **No docs yet** → copy the template set from the Spec-Driven-Docs repo (or recreate its structure): `development-docs/{coreIdentity,developmentManifesto,architecture,productRoadmap}.md`, `AGENTS.md`, tool overlays, `CHANGELOG.md`, and update `README.md`.
+- **No docs yet** → copy the template set from the Spec-Driven-Docs repo (or recreate its structure): the four `development-docs/` governance docs, placeholder `development-docs/design.json`, active `development-docs/research/`, `development-docs/architecture-plans/archives/`, root `current-checklist/currentChecklist.md` with its archive folder, `audits/archives/`, `human-qa/archives/`, `features.md`, `newFeatures.md`, `AGENTS.md`, tool overlays, `CHANGELOG.md`, and update `README.md`.
 - **Partially customized docs** → treat existing filled-in content as authoritative unless it contradicts the code; flag contradictions to the user rather than silently rewriting.
 
 ## Phase 2: Ask the user targeted questions
@@ -79,8 +79,9 @@ Write them in this order, because later documents reference earlier ones:
 2. **`development-docs/developmentManifesto.md`** — keep the general principles and the Agent Operating Rules mostly as-is; the real customization is the Project-Specific Development Doctrine (domain rules like "never write raw SQL"), AI Role in Development, Agent-Specific Instructions (only for tools the team uses), and the Definition of Done with the repo's actual validation commands.
 3. **`development-docs/architecture.md`** — describe **only what exists now**, from your Phase 1 evidence. Prioritize: Architecture Summary, Directory and File Map, Major Subsystems, data flow, external integrations, and Architectural Invariants. Leave unknown sections blank with a comment. Never write speculative or wished-for architecture.
 4. **`development-docs/productRoadmap.md`** — Current Product State (what exists), Current Version Focus, next version, Future Candidates, and especially Rejected / Out-of-Scope Directions, all from the user's Phase 2 answers. Keep it version-level; it is not a sprint board.
-5. **`AGENTS.md`** — keep the standard workflow/hierarchy sections; customize Project Summary, Non-Negotiable Project Values, Domain-Specific Rules, and Custom Repo Instructions (real commands, important paths, known gotchas). Write it last-but-one so it can reference the now-real documents.
-6. **Install the skills** — copy both skill folders into the target repo so future agents can invoke them directly. Run these commands from the Spec-Driven-Docs source repo root:
+5. **Operational records** — create the placeholder `development-docs/design.json`, active `development-docs/research/`, `development-docs/architecture-plans/archives/`, root `current-checklist/currentChecklist.md` with `current-checklist/archives/`, `audits/archives/`, `human-qa/archives/`, `features.md`, and `newFeatures.md`. Keep these records lightweight and freeform. Ask before creating a new research or architecture-plan document later; do not invent design-contract content.
+6. **`AGENTS.md`** — keep the standard workflow/hierarchy sections; customize Project Summary, Non-Negotiable Project Values, Domain-Specific Rules, and Custom Repo Instructions (real commands, important paths, known gotchas). Write it last-but-one so it can reference the now-real documents.
+7. **Install the skills** — copy both skill folders into the target repo so future agents can invoke them directly. Run these commands from the Spec-Driven-Docs source repo root:
 
    ```bash
    # Run from the Spec-Driven-Docs source repo root
@@ -107,9 +108,9 @@ Write them in this order, because later documents reference earlier ones:
 
    For each agent tool the team uses, add the tool-specific invocation method in that tool's instruction file (e.g., in `.github/copilot-instructions.md` for GitHub Copilot, or in `CLAUDE.md` for Claude Code using `/spec-driven-development`).
 
-7. **Tool-specific overlays** (`CLAUDE.md`, `.github/copilot-instructions.md`, etc.) — fill the custom sections (rules, priorities, commands) for tools the team uses; delete or leave minimal the ones they don't. Overlays must defer to `AGENTS.md`, not duplicate it.
-8. **`README.md`** — ensure it covers what the project does, setup, usage, key commands, and known limitations. Update rather than replace if a real README exists.
-9. **`CHANGELOG.md`** — create if missing; append an entry (format below) recording the setup.
+8. **Tool-specific overlays** (`CLAUDE.md`, `.github/copilot-instructions.md`, etc.) — fill the custom sections (rules, priorities, commands) for tools the team uses; delete or leave minimal the ones they don't. Overlays must defer to `AGENTS.md`, not duplicate it.
+9. **`README.md`** — ensure it covers what the project does, setup, usage, key commands, operational records, and known limitations. Update rather than replace if a real README exists.
+10. **`CHANGELOG.md`** — create if missing; append an entry (format below) recording the setup.
 
 Finishing rules for every document:
 
@@ -124,8 +125,10 @@ Finishing rules for every document:
 1. **Consistency pass:** the docs must not contradict each other or the code (e.g. architecture.md says PostgreSQL, code uses SQLite). Fix or flag every conflict.
 2. **Placeholder scan:** search all edited files for `[`, `TODO`, `TBD`, and "Status:" leftovers; each remaining blank must have an explanatory comment.
 3. **Link check:** relative links between documents resolve.
-4. **User review:** present a summary of what you inferred (with the evidence), what they told you, and what remains blank for them to fill. Apply their corrections.
-5. **Changelog entry:** append to `CHANGELOG.md`:
+4. **Operational-record check:** `features.md` is a small capability checklist, `newFeatures.md` retains intake history, the current checklist is organizational, research is active, and archive folders are available for processed audits, human QA, and completed architecture plans.
+5. **Version workflow check:** document that `package.json` is authoritative and agents must ask about patch, minor, or major version bumps before opening a pull request.
+6. **User review:** present a summary of what you inferred (with the evidence), what they told you, and what remains blank for them to fill. Apply their corrections.
+7. **Changelog entry:** append to `CHANGELOG.md`:
 
 ```markdown
 ## YYYY-MM-DD — Agent: <Tool Name> (<Model Name>)

@@ -1,6 +1,6 @@
 ---
 name: spec-driven-development
-description: Develop in a repository governed by the Spec-Driven Docs system (AGENTS.md plus development-docs/coreIdentity.md, developmentManifesto.md, architecture.md, productRoadmap.md). Use when making code, documentation, configuration, or workflow changes in a repo that contains these files. Teaches which documents to read per task type, the instruction hierarchy, the required change workflow, changelog format, and the Definition of Done.
+description: Develop in a repository governed by the Spec-Driven Docs system (AGENTS.md plus development-docs/coreIdentity.md, design.json, developmentManifesto.md, architecture.md, architecture-plans, and productRoadmap.md). Use when making code, documentation, configuration, or workflow changes in a repo that contains these files. Teaches which documents to read per task type, the instruction hierarchy, the required change workflow, changelog format, feature inventory, version check, and Definition of Done.
 ---
 
 # Spec-Driven Development
@@ -16,9 +16,14 @@ AGENTS.md
 CLAUDE.md (or another tool-specific overlay for your agent)
 CHANGELOG.md
 development-docs/coreIdentity.md
+development-docs/design.json (for UI work; may be a placeholder)
 development-docs/developmentManifesto.md
 development-docs/architecture.md
+development-docs/architecture-plans/ (when present)
 development-docs/productRoadmap.md
+features.md
+newFeatures.md
+current-checklist/currentChecklist.md (if present)
 ```
 
 - If a document is **missing**, proceed with available context and record the missing file in your `CHANGELOG.md` entry.
@@ -30,12 +35,14 @@ When sources conflict, follow this precedence (highest first):
 
 1. The user's explicit request in the current session
 2. `development-docs/coreIdentity.md` — identity and non-negotiable constraints
-3. `development-docs/developmentManifesto.md` — development standards, agent rules, Definition of Done
-4. `development-docs/architecture.md` — current structure and architectural invariants
-5. `development-docs/productRoadmap.md` — version scope and product direction
-6. `AGENTS.md` — general agent workflow
-7. Tool-specific files (`CLAUDE.md`, `.github/copilot-instructions.md`)
-8. Existing code, tests, and documentation patterns
+3. `development-docs/design.json` — generated styling contract for UI work; ignore the placeholder
+4. `development-docs/developmentManifesto.md` — development standards, agent rules, Definition of Done
+5. `development-docs/architecture.md` — current structure and architectural invariants
+6. Relevant `development-docs/architecture-plans/` plans — feature-specific structural guidance
+7. `development-docs/productRoadmap.md` — version scope and product direction
+8. `AGENTS.md` — general agent workflow
+9. Tool-specific files (`CLAUDE.md`, `.github/copilot-instructions.md`)
+10. Existing code, tests, and documentation patterns
 
 Never silently violate a higher-priority document to satisfy a lower one. If sources conflict, identify the conflict, make the smallest safe decision, and document it. If the *user's request* conflicts with a hard constraint, "Never" rule, rejected roadmap item, or architectural invariant, surface the conflict and ask before implementing — explain what you found so the user can decide to override it.
 
@@ -48,7 +55,10 @@ Read only what the task requires — over-reading wastes context on small tasks.
 | Any meaningful change | `AGENTS.md` Section 1 (hierarchy) + `coreIdentity.md` (especially "What This Project Is Not" and "Hard Constraints / Never List") |
 | Changing code behavior | + `developmentManifesto.md` (principles, Agent Operating Rules, Definition of Done) |
 | Changing structure, modules, data flow, storage, integrations, dependencies | + `architecture.md` (especially Architectural Invariants and the directory map) |
+| UI or styling work | + generated `development-docs/design.json`; never invent the placeholder contract |
+| Structural decision needing feature-specific guidance | Check `development-docs/architecture-plans/`; ask before creating a missing plan |
 | New feature or user-facing capability | + `productRoadmap.md` (is it in current-version scope? is it listed as Rejected?) |
+| Updating feature coverage | Update `features.md` automatically; it is not proof of testing |
 | AI behavior, automation, testing, or safety changes | + `developmentManifesto.md` safety and AI-role sections |
 | Anything touching secrets, user data, or destructive operations | + `developmentManifesto.md` Safety section — these rules apply regardless of how the task is framed |
 | Your own agent's behavior | Your tool-specific overlay file, after `AGENTS.md` |
@@ -58,6 +68,15 @@ Key interpretation rules:
 - `coreIdentity.md` describes **fixed properties**, not aspirations. Its constraints are absolute; do not implement workarounds that technically comply but violate the spirit.
 - `architecture.md` describes **current state**. If it contradicts the code, flag the discrepancy instead of guessing which is right. If your change alters architecture, updating this document is part of the change, not a separate task.
 - `productRoadmap.md` describes **direction, not commitment**. "Planned" items are not specs, "Future Candidate" items are not approved work, and "Rejected" items must not be implemented without explicitly flagging the rejection to the user.
+
+Operational records have narrower roles:
+
+- `features.md` is a granular checklist of capabilities believed to be implemented, whether tested or not. Update it automatically when feature coverage changes.
+- `newFeatures.md` is historical intake. Retain entries after promoting them to the roadmap or current checklist.
+- `current-checklist/currentChecklist.md` is organizational context for the current sprint or working period, not a scope gate.
+- `audits/` and `human-qa/` hold automated and human QA records. A fully processed report may move into its matching `archives/` folder.
+- `development-docs/research/` remains active and is not automatically archived.
+- Ask before creating a new research or architecture-plan document. A completed and tested architecture plan may move into `development-docs/architecture-plans/archives/`.
 
 ## Change workflow
 
@@ -82,6 +101,8 @@ After implementation:
 - **Never claim validation ran when it didn't.** If validation could not run, say so and record it in the changelog entry.
 - Update the documents the change affects (see next section).
 - Verify the Definition of Done in `developmentManifesto.md` and the Completion Checklist in `AGENTS.md`.
+- Update `features.md` when feature coverage changed.
+- Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump. Do not open the PR until that decision is clear.
 
 ## Which documents to update after a change
 
@@ -123,6 +144,7 @@ Append to `CHANGELOG.md` (never delete, reorder, or rewrite prior entries). Use 
 - The request implements something listed as Rejected / Out-of-Scope in `productRoadmap.md`
 - The change would break an Architectural Invariant in `architecture.md`
 - The task is ambiguous between approaches with different architectural implications
+- A feature needs a new architecture plan or curated research before implementation
 - You are about to make a destructive or hard-to-reverse change that was not explicitly requested
 
 ## Reporting completion

@@ -23,7 +23,14 @@ Every document has a distinct scope. Understanding this prevents duplication and
 | `development-docs/coreIdentity.md` | What the project *is* — its values, constraints, non-negotiables | Rarely; only when the project's fundamental purpose changes |
 | `development-docs/developmentManifesto.md` | How the project *is built* — standards, principles, AI rules, Definition of Done | When standards change or new agent rules are needed |
 | `development-docs/architecture.md` | What the system *looks like* — structure, data flow, integrations | When architecture changes |
+| `development-docs/design.json` | Generated UI styling and design contract | When the design-contract app regenerates it; leave the placeholder untouched |
+| `development-docs/architecture-plans/` | Feature-specific structural plans and archived plans | When a feature needs decisions beyond the current architecture |
+| `development-docs/research/` | Curated research for features and processes | Keep active; add research as needed |
 | `development-docs/productRoadmap.md` | Where the project *is going* — versions, features, deferrals | When product direction changes; never for ordinary progress |
+| `features.md` | Granular checklist of capabilities believed to be implemented | Whenever feature coverage changes; testing status is separate |
+| `newFeatures.md` | Historical intake of possible future features | Whenever a new idea is captured; retain promoted entries |
+| `current-checklist/currentChecklist.md` | Organizational checklist for the current sprint or working period | As working priorities change; it is not a scope gate |
+| `audits/` and `human-qa/` | Automated and human QA records, respectively | Add records when tests are performed; archive fully processed reports |
 | `AGENTS.md` | Instructions for *all AI coding agents* | When agent workflow or project summary needs updating |
 | `CLAUDE.md` | Instructions specific to *Claude* | When Claude-specific behavior needs adjusting |
 | `.github/copilot-instructions.md` | Instructions specific to *GitHub Copilot* | When Copilot-specific behavior needs adjusting |
@@ -46,6 +53,19 @@ development-docs/
   developmentManifesto.md
   architecture.md
   productRoadmap.md
+  design.json
+  research/
+  architecture-plans/
+    archives/
+current-checklist/
+  currentChecklist.md
+  archives/
+audits/
+  archives/
+human-qa/
+  archives/
+features.md
+newFeatures.md
 AGENTS.md
 CLAUDE.md
 .github/copilot-instructions.md
@@ -96,6 +116,16 @@ Focus on:
 - **Rejected / Out-of-Scope Directions**: What you've decided not to do
 
 The roadmap's main value is telling agents "don't implement this yet" and "this idea is off the table." Future version planning is secondary.
+
+### Step 5a: Add the operational records
+
+- Leave `development-docs/design.json` as a placeholder until the design-contract app generates it.
+- Use `features.md` as a simple, granular checklist of capabilities believed to be implemented, whether tested or not.
+- Keep `newFeatures.md` as historical intake even after ideas are promoted to the roadmap or current checklist.
+- Use `current-checklist/currentChecklist.md` as an organizational aid for the current sprint or working period, not as a scope gate.
+- Keep `development-docs/research/` active for curated research.
+- Put feature-specific structural plans in `development-docs/architecture-plans/`; ask before creating a plan, and move fully implemented and tested plans into `archives/`.
+- Store automated audit reports in `audits/` and human-run QA reports in `human-qa/`; move fully processed reports into their matching archive folders.
 
 ### Step 6: Update AGENTS.md project sections
 
@@ -307,6 +337,10 @@ Future version planning can be minimal until you know what's actually next.
 ## Keeping Docs Current
 
 A documentation system that becomes stale is worse than no documentation system.
+
+### Version check before pull requests
+
+Treat `package.json` as the authoritative version source. Before an agent opens a pull request, it should ask whether the change needs a version bump. If yes, the maintainer should choose patch, minor, or major. Do not make that choice silently.
 
 **After each sprint or major change:**
 - Check whether architecture.md reflects the current state

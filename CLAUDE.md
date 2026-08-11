@@ -31,9 +31,11 @@ Before making meaningful changes, Claude must:
 
 1. Read and follow `AGENTS.md`.
 2. Read `development-docs/coreIdentity.md`.
-3. Consult `development-docs/developmentManifesto.md` when development standards, AI behavior, safety, validation, or workflow rules are relevant.
-4. Consult `development-docs/architecture.md` before changing structure, data flow, storage, integrations, dependencies, generated artifacts, or major module boundaries.
-5. Consult `development-docs/productRoadmap.md` before implementing new product capabilities or changing version scope.
+3. Read `development-docs/design.json` for UI or styling work when it contains a generated design contract; do not invent content for its placeholder.
+4. Consult `development-docs/developmentManifesto.md` when development standards, AI behavior, safety, validation, or workflow rules are relevant.
+5. Consult `development-docs/architecture.md` before changing structure, data flow, storage, integrations, dependencies, generated artifacts, or major module boundaries.
+6. Check relevant plans in `development-docs/architecture-plans/` before structural decisions. If a needed plan does not exist, pause and ask before creating one.
+7. Consult `development-docs/productRoadmap.md` before implementing new product capabilities or changing version scope.
 
 If any required document is missing, proceed with available context and record the missing document in `CHANGELOG.md`.
 
@@ -68,6 +70,9 @@ After implementation:
 - Update `README.md` when behavior materially changes.
 - Update `development-docs/architecture.md` carefully if architecture changed.
 - Do not update `development-docs/productRoadmap.md` unless version scope or product direction changed.
+- Update `features.md` automatically when feature coverage changes; listing a feature does not claim it passed QA.
+- Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump. Do not open the PR until that decision is clear.
+- Fully processed audit, human-QA, or architecture-plan files may move into their matching `archives/` folder. Do not archive active research.
 
 ---
 
@@ -170,6 +175,11 @@ When reporting completion, Claude should include what changed, which files chang
 - When asked to set up Spec-Driven Docs in another repo, invoke `/spec-driven-docs-setup`. The skill includes steps to install both skills in the target repo — complete those steps.
 - Treat `development-docs/` files as templates: never replace placeholder text with invented content.
 - When editing a skill (`SKILL.md`), check the corresponding guide (`guides/ai-guide.md` or `guides/human-guide.md`) for sections that should be updated to match, and update them in the same change.
+- Keep `features.md` as a small capability checklist and update it automatically when capabilities change.
+- Treat `current-checklist/currentChecklist.md` as organizational context only; it does not constrain the requested work.
+- Ask before creating a new research or architecture-plan document. Fully processed audits, human-QA reports, and completed architecture plans may be moved to their archive folders.
+- Leave the placeholder `development-docs/design.json` untouched until a design-contract app generates it.
+- Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump.
 
 ### Claude Should Prioritize
 
@@ -189,6 +199,8 @@ When reporting completion, Claude should include what changed, which files chang
 npm install   # install test dependencies
 npm test      # smoke tests: required file presence and link resolution
 ```
+
+Important operational paths include `features.md`, `newFeatures.md`, `current-checklist/currentChecklist.md`, `audits/`, `human-qa/`, `development-docs/research/`, and `development-docs/architecture-plans/`.
 
 ---
 

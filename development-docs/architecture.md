@@ -10,6 +10,8 @@
 >
 > Do not use this document as a roadmap, changelog, scratchpad, or speculative design document. It should describe the architecture that exists now.
 
+Use `development-docs/architecture-plans/` for feature-specific structural plans that need unresolved choices or extra guidance. Move a plan into its `archives/` folder only after the feature is fully implemented and tested; do not use this document to hold speculative plans.
+
 ---
 
 ## How to Use This Template  

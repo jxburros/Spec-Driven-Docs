@@ -9,6 +9,20 @@ This directory contains two reusable skills for AI coding agents (Claude, Copilo
 
 Both skills are self-contained: they can be copied into any repository (or a shared skills location) without the rest of this repo.
 
+## Operational records covered by the skills
+
+The skills also understand the repository's supporting records:
+
+- `development-docs/design.json` is a placeholder until a design-contract app generates the styling contract.
+- `development-docs/research/` remains active for curated research.
+- `development-docs/architecture-plans/` holds feature-specific plans; agents ask before creating new plans and may archive completed, tested plans.
+- `current-checklist/currentChecklist.md` is an organizational sprint aid, not a scope gate.
+- `audits/` and `human-qa/` hold automated and human QA records; fully processed reports may move to their archive folders.
+- `features.md` is a granular checklist of capabilities believed to be implemented, whether tested or not.
+- `newFeatures.md` retains the historical intake of ideas promoted to the roadmap or current checklist.
+
+Before opening a pull request, agents must ask whether the authoritative `package.json` version should receive a patch, minor, or major bump.
+
 ## Installing the skills
 
 Each skill is a folder containing a `SKILL.md` file with YAML frontmatter (`name`, `description`) followed by plain markdown instructions. This is the [Agent Skills](https://code.claude.com/docs/en/skills) format used by Claude Code, but the body is ordinary markdown that any LLM tool can consume.

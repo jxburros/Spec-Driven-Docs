@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## 2026-08-10 — Agent: OpenAI Codex (GPT-5)
+
+### Changed
+- Added the operational documentation structure for design contracts, research, architecture plans, current checklists, automated audits, human QA, feature inventory, and historical feature intake.
+- Updated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` with the new hierarchy, document roles, archive behavior, automatic `features.md` maintenance, and the version-bump question required before opening a pull request.
+- Updated the human and AI guides, both portable skills, `skills/README.md`, `README.md`, `docs/index.html`, the core identity/manifesto/architecture/roadmap templates, and documentation smoke tests.
+
+### Not completed
+- None.
+
+### Notes
+- `development-docs/design.json` is a valid placeholder and must remain untouched until a design-contract app generates it.
+- `package.json` remains at its existing version; no version bump was requested for this documentation-only change.
+- The pull request was not opened in this pass so the version-bump confirmation can occur at the required point before PR creation.
+
+### Handover
+- Next agent should start with: `AGENTS.md`, then the relevant operational record for the task.
+- Open questions: None.
+- Risks or assumptions: archive folders are tracked with `.gitkeep` files so the requested structure exists before reports or plans are added.
+
+
 ## 2026-07-04 — Agent: GitHub Copilot (Copilot)
 
 ### Changed

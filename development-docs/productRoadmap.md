@@ -560,8 +560,10 @@ When a question is resolved:
 
 ---
 
-## 13. AI-Coding-Agent Roadmap Guidance  
+## 13. AI-Coding-Agent Roadmap Guidance
 **Status: Required for AI-agent-assisted repos**
+
+`newFeatures.md` is the historical intake list for ideas that may later be promoted into this roadmap or the current checklist. `current-checklist/currentChecklist.md` is an organizational sprint aid, not a substitute for version scope.
 
 AI agents may use this roadmap to understand product direction and version scope.
 

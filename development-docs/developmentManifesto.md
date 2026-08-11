@@ -472,6 +472,16 @@ Use these documents intentionally:
 - `CHANGELOG.md` — meaningful chronological changes.
 - `README.md` — public-facing overview, setup, usage, and contribution entry point.
 
+Add these operational records when the repository uses them:
+
+- `development-docs/design.json` is the generated styling and design contract for UI work. The placeholder is not authoritative.
+- `development-docs/architecture-plans/` contains feature-specific structural guidance when a plan exists.
+- `features.md` is a granular checklist of capabilities believed to be implemented, whether tested or not.
+- `newFeatures.md` is historical intake for ideas that may be promoted to the roadmap or current checklist.
+- `current-checklist/currentChecklist.md` is organizational context for the current sprint or working period, not a scope gate.
+- `audits/` and `human-qa/` contain automated and human QA records; processed reports may move to their archive folders.
+- `development-docs/research/` contains active curated research for feature and process decisions.
+
 ### Changelog Updates
 
 Update `CHANGELOG.md` when work meaningfully changes:
@@ -737,6 +747,8 @@ A task is done only when all applicable items are true:
 - `productRoadmap.md` was updated only for version-scope or product-direction changes.
 - Incomplete, blocked, or intentionally skipped work is recorded honestly.
 - Handover notes are captured when remaining context could help the next maintainer or agent.
+- `features.md` is updated when feature coverage changes.
+- If opening a pull request, the maintainer is asked whether `package.json` needs a patch, minor, or major version bump.
 
 Other documents should reference this section instead of duplicating alternate completion checklists.
 
