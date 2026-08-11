@@ -1,6 +1,44 @@
 # CHANGELOG
 
 
+## 2026-08-11 — Agent: Claude Code (Claude)
+
+### Changed
+- Slimmed `CLAUDE.md` and `.github/copilot-instructions.md` down to true tool-specific deltas (skill-invocation method, changelog agent name, tool-specific cautions) instead of restating `AGENTS.md`'s hierarchy, change workflow, document tables, testing rules, completion checklist, and Custom Repo Instructions (commands/paths/gotchas), which now live only in `AGENTS.md` Section 19. Both overlays now explicitly point to `AGENTS.md` for the shared rules instead of duplicating them, matching the project's own Non-Negotiable Project Values (§6) about avoiding duplicated content.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: ran `npm test` after the edit (4/4 passing) — file-presence and link-resolution checks still pass since section content, not file paths, changed.
+- Historical `CHANGELOG.md` entries reference old section numbers in the overlay files (e.g. "Section 8", "Section 11" in the 2026-07-04 entry) — left as-is since changelog entries are append-only project memory, not living documentation.
+
+### Handover
+- Next agent should start with: no open follow-up from this change.
+- Open questions: None.
+- Risks or assumptions: Assumes the maintainer wants the overlays to be pure deltas going forward; if either tool later needs its own full command/path listing (e.g. divergent commands per tool), reintroduce it in that overlay rather than back into AGENTS.md.
+
+---
+
+## 2026-08-11 — Agent: Claude Code (Claude)
+
+### Changed
+- Fixed a duplication bug in `AGENTS.md`: a leftover, mislabeled "## 11. README Rules" block (actually near-duplicate changelog instructions) sat between Section 10 (Changelog Rules) and the real Section 11 (README Rules), leaving two sections numbered 11. Removed the duplicate block; sections 1–19 now number correctly with no repeated content.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: ran `npm test` before and after the edit (4/4 passing) to confirm no links or required files broke.
+- Found while reviewing the governance system end-to-end at the maintainer's request; no other structural defects were identified in that review.
+
+### Handover
+- Next agent should start with: no open follow-up from this change.
+- Open questions: whether to reduce duplication across `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` — the three overlays restate most of the same tables/checklists rather than the overlays deferring to `AGENTS.md` as the project's own values (§6) call for. Flagged for the maintainer to decide; not changed here since it wasn't requested.
+- Risks or assumptions: None.
+
+---
+
 ## 2026-08-10 — Agent: OpenAI Codex (GPT-5)
 
 ### Changed
