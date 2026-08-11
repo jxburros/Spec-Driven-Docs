@@ -38,12 +38,14 @@ When instructions conflict, follow this precedence order (highest to lowest):
 
 1. **User's explicit request** in the current session
 2. `development-docs/coreIdentity.md` — Project identity and non-negotiable constraints
-3. `development-docs/developmentManifesto.md` — Development standards, AI operating rules, Definition of Done
-4. `development-docs/architecture.md` — System structure and architectural invariants
-5. `development-docs/productRoadmap.md` — Version scope and product direction
-6. `AGENTS.md` — General agent instructions and workflow
-7. Tool-specific files (`CLAUDE.md`, `.github/copilot-instructions.md`) — Your agent's specific instructions
-8. Existing code — Actual implemented behavior
+3. `development-docs/design.json` — Generated styling contract for UI work; ignore the placeholder
+4. `development-docs/developmentManifesto.md` — Development standards, AI operating rules, Definition of Done
+5. `development-docs/architecture.md` — System structure and architectural invariants
+6. Relevant `development-docs/architecture-plans/` plans — Feature-specific structural guidance
+7. `development-docs/productRoadmap.md` — Version scope and product direction
+8. `AGENTS.md` — General agent instructions and workflow
+9. Tool-specific files (`CLAUDE.md`, `.github/copilot-instructions.md`) — Your agent's specific instructions
+10. Existing code — Actual implemented behavior
 
 **What this means in practice:** If a user asks you to do something that conflicts with a coreIdentity.md constraint, follow the constraint and explain the conflict. If AGENTS.md says one thing and the code does another, follow AGENTS.md and note the discrepancy. Never silently violate a higher-priority document to satisfy a lower-priority one.
 
@@ -58,7 +60,13 @@ Use this table to know which documents to read before starting a task.
 | Any meaningful change | AGENTS.md Section 1 (hierarchy), coreIdentity.md |
 | Changing code behavior | + developmentManifesto.md (principles, Definition of Done) |
 | Changing structure, modules, data flow, integrations | + architecture.md |
+| UI or styling work | + generated `development-docs/design.json` |
+| Structural decision needing feature-specific guidance | Check `development-docs/architecture-plans/`; ask before creating a missing plan |
 | Implementing a new feature | + productRoadmap.md (is this in scope for current version?) |
+| Updating feature coverage | Update `features.md` automatically; it is an inventory, not proof of testing |
+| Reviewing QA or audit evidence | Use the relevant `audits/` or `human-qa/` file; archive it after fully processing it |
+| Using curated research | Read relevant material in `development-docs/research/`; research remains active |
+| Organizing current work | `current-checklist/currentChecklist.md`; it is not a scope gate |
 | Changing AI agent behavior or safety rules | + developmentManifesto.md Section 14 (Agent Operating Rules) |
 | Updating documentation | Check architecture.md Section 21 (When to Update) |
 | Anything touching secrets, data, or destructive operations | developmentManifesto.md Section 8 (Safety) |
@@ -145,6 +153,16 @@ Do not read every document for every task. Read the relevant documents and proce
 
 ---
 
+### Operational records
+
+- `features.md` is a deliberately granular checklist of capabilities believed to be implemented, whether tested or not. Update it automatically when a capability changes.
+- `newFeatures.md` is historical intake. Keep entries after promoting them to the roadmap or current checklist.
+- `current-checklist/currentChecklist.md` is a lightweight organizational tool for the current sprint or working period. It does not define scope.
+- `audits/` contains automated audits and `human-qa/` contains human-run tests. Once a report has been fully processed, it may move into its matching `archives/` folder.
+- `development-docs/architecture-plans/` contains feature-specific plans. Ask before creating a new plan; archive a completed and tested plan when its guidance is no longer active.
+- `development-docs/research/` contains active curated research and is not automatically archived.
+- `development-docs/design.json` is a placeholder until the design-contract app generates it. Do not invent styling rules in it.
+
 ### `AGENTS.md`
 
 **What it is:** General operating instructions for all AI coding agents in this repository.
@@ -201,6 +219,8 @@ After implementation:
 - Update README.md if user-facing behavior, setup, or features changed
 - Update architecture.md if architecture changed
 - Verify the completion checklist in AGENTS.md Section 17
+- Update `features.md` when feature coverage changed.
+- Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump. Do not open the PR until the decision is clear.
 
 ---
 
@@ -275,6 +295,7 @@ Ask the user before proceeding when:
 - The request would implement something listed as "Rejected / Out-of-Scope" in productRoadmap.md
 - The request would break an Architectural Invariant in architecture.md
 - The task is ambiguous between two approaches that have different architectural implications
+- A feature needs a new architecture plan or new curated research before implementation
 - You're about to make a destructive or hard-to-reverse change that wasn't explicitly requested
 
 State what you found and why you're asking. Don't just refuse — explain the conflict so the user can decide whether to override it.

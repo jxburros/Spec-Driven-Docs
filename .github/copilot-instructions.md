@@ -32,8 +32,10 @@ Before making meaningful changes, GitHub Copilot should follow `AGENTS.md`.
 At minimum:
 
 - Read `development-docs/coreIdentity.md` before changing code, UX, product behavior, workflow, or documentation.
+- Read `development-docs/design.json` before UI or styling work when it contains a generated design contract. Do not invent content for its placeholder.
 - Consult `development-docs/developmentManifesto.md` when development standards, safety, testing, AI behavior, or automation behavior are relevant.
 - Consult `development-docs/architecture.md` before changing structure, dependencies, data flow, storage, integrations, or major module boundaries.
+- Check relevant plans in `development-docs/architecture-plans/` before structural decisions. Pause and ask before creating a missing plan.
 - Consult `development-docs/productRoadmap.md` before implementing new features or changing product direction.
 
 Do not make blind changes without understanding the relevant source-of-truth documents.
@@ -48,6 +50,8 @@ Do not make blind changes without understanding the relevant source-of-truth doc
 | All meaningful tasks | `AGENTS.md` and `development-docs/coreIdentity.md` |
 | New feature or product capability | `development-docs/productRoadmap.md` |
 | Refactor, restructuring, file navigation, dependency change | `development-docs/architecture.md` |
+| UI or styling work | `development-docs/design.json` when generated |
+| Structural decision needing feature-specific guidance | Relevant `development-docs/architecture-plans/` plan, or ask before creating one |
 | AI behavior, automation, QA, validation, safety, or workflow change | `development-docs/developmentManifesto.md` |
 | Setup, usage, commands, config, or public-facing behavior | `README.md` |
 | Completed, incomplete, or blocked work | `CHANGELOG.md` |
@@ -80,6 +84,8 @@ For each task, Copilot should:
 10. Update `README.md` when behavior, setup, usage, configuration, or workflow materially changes.
 11. Update `development-docs/architecture.md` carefully if actual architecture changes.
 12. Do not update `development-docs/productRoadmap.md` unless version scope or product direction changes.
+13. Update `features.md` automatically when feature coverage changes.
+14. Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump; do not open the PR until that decision is clear.
 
 When scope is broad or open-ended, complete the requested scope thoroughly, but do not expand beyond project identity, current roadmap scope, or architecture without explicit direction.
 
@@ -223,6 +229,11 @@ When reporting completion, include what changed, files changed, whether `README.
 - When asked to set up Spec-Driven Docs in another repository, use the `spec-driven-docs-setup` skill (read `skills/spec-driven-docs-setup/SKILL.md`) and complete the step to install both skills in the target repo.
 - Treat `development-docs/` files as templates: never replace placeholder text with invented content.
 - When editing a SKILL.md file, check the corresponding guide and update it in the same change.
+- Keep `features.md` as a simple inventory of capabilities believed to be implemented, whether tested or not, and update it automatically when feature coverage changes.
+- Treat `current-checklist/currentChecklist.md` as organizational context, not a scope gate.
+- Ask before creating a new research or architecture-plan document. Fully processed audit, human-QA, and architecture-plan files may move into their archive folders.
+- Leave placeholder `development-docs/design.json` untouched until the design-contract app generates it.
+- Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump.
 
 ### Important Commands
 
@@ -238,6 +249,12 @@ npm test      # smoke tests: required file presence and link resolution
 | `skills/spec-driven-development/SKILL.md` | Portable development-workflow skill |
 | `skills/spec-driven-docs-setup/SKILL.md` | Portable docs-setup skill |
 | `development-docs/` | Template documents — contain intentional placeholders |
+| `development-docs/design.json` | Placeholder for generated styling contract |
+| `development-docs/research/` | Active curated research |
+| `development-docs/architecture-plans/` | Feature-specific structural plans and archives |
+| `current-checklist/currentChecklist.md` | Current sprint or working-period checklist |
+| `audits/` and `human-qa/` | Automated and human QA records with archives |
+| `features.md` and `newFeatures.md` | Capability inventory and historical feature intake |
 | `guides/ai-guide.md` | Full AI agent reference |
 | `guides/human-guide.md` | Full human setup guide |
 

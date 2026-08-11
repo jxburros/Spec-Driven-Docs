@@ -43,6 +43,34 @@ test('core documentation set is present', () => {
   }
 });
 
+test('operational documentation structure is present', () => {
+  for (const file of [
+    'development-docs/design.json',
+    'development-docs/architecture.md',
+    'development-docs/productRoadmap.md',
+    'current-checklist/currentChecklist.md',
+    'features.md',
+    'newFeatures.md',
+  ]) {
+    assert.ok(exists(file), `${file} is missing`);
+  }
+
+  for (const directory of [
+    'audits',
+    'audits/archives',
+    'human-qa',
+    'human-qa/archives',
+    'development-docs/research',
+    'development-docs/architecture-plans',
+    'development-docs/architecture-plans/archives',
+    'current-checklist/archives',
+  ]) {
+    assert.ok(statSync(path.join(root, directory)).isDirectory(), `${directory} is missing`);
+  }
+
+  assert.equal(typeof JSON.parse(read('development-docs/design.json'))._comment, 'string');
+});
+
 test('relative markdown links resolve to files in the repository', () => {
   const brokenLinks = [];
 

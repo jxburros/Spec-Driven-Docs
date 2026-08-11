@@ -431,4 +431,12 @@ This document defines the project identity. Use the other starting documents for
 - `CHANGELOG.md` — chronological record of meaningful changes.
 - `README.md` — public-facing project overview, setup, usage, and contribution entry point.
 
+Additional operational records may be consulted as needed:
+
+- `development-docs/design.json` for the generated UI styling contract; the placeholder is not authoritative.
+- `development-docs/architecture-plans/` for feature-specific structural guidance.
+- `development-docs/research/` for active curated research.
+- `features.md`, `newFeatures.md`, and `current-checklist/currentChecklist.md` for capability inventory, historical intake, and current organizational context.
+- `audits/` and `human-qa/` for automated and human QA records.
+
 When documents conflict, treat this file as the identity source, then resolve implementation details through the more specific document.
