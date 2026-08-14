@@ -71,3 +71,9 @@ When making meaningful changes:
 2. Make the smallest safe change.
 3. Validate changes where possible.
 4. Append a `CHANGELOG.md` entry with completed, incomplete, and handover notes.
+
+---
+
+## Project Stewardship
+
+This project is developed by **Jeffrey** through **JX Holdings, LLC**. GitHub: [`jxburros`](https://github.com/jxburros).
