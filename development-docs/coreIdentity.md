@@ -95,7 +95,7 @@ A request that conflicts with a constraint is neither refused outright nor worke
 - **Decision record (`D-NNNN`)** — a maintainer-approved deviation from a rule, in `development-docs/decisions/`.
 - **Proposal (`P-NNNN`)** — a per-change plan drafted before a structural change or new capability, in `development-docs/architecture-plans/`, archived when implemented.
 - **Overlay** — a tool-specific instruction file that defers to `AGENTS.md`.
-- **Operational records** — `features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, `development-docs/research/`.
+- **Operational records** — the freeform records the templates provide to adopters: `features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, `development-docs/research/`, `development-docs/design.json`. This repository does not keep its own.
 
 ---
 

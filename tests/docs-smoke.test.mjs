@@ -48,30 +48,32 @@ test('live documentation set is present', () => {
     'development-docs/developmentManifesto.md',
     'development-docs/architecture.md',
     'development-docs/productRoadmap.md',
-    'development-docs/design.json',
     'development-docs/decisions/TEMPLATE.md',
     'development-docs/architecture-plans/TEMPLATE.md',
-    'current-checklist/currentChecklist.md',
-    'features.md',
-    'newFeatures.md',
     '.claude/settings.json',
     '.claude/hooks/session-start.sh',
   ]) {
     assert.ok(exists(file), `${file} is missing`);
   }
 
-  for (const directory of [
-    'audits/archives',
-    'human-qa/archives',
-    'development-docs/research',
-    'development-docs/decisions/archives',
-    'development-docs/architecture-plans/archives',
-    'current-checklist/archives',
-  ]) {
+  for (const directory of ['development-docs/decisions/archives', 'development-docs/architecture-plans/archives']) {
     assert.ok(isDirectory(directory), `${directory} is missing`);
   }
+});
 
-  assert.equal(typeof JSON.parse(read('development-docs/design.json'))._comment, 'string');
+test('operational records exist only as templates, not at the repository root (P-0001)', () => {
+  for (const entry of [
+    'features.md',
+    'newFeatures.md',
+    'current-checklist',
+    'audits',
+    'human-qa',
+    'development-docs/research',
+    'development-docs/design.json',
+  ]) {
+    assert.ok(!exists(entry), `${entry} must not exist at the root; it belongs under templates/`);
+    assert.ok(exists(path.join('templates', entry)), `templates/${entry} is missing`);
+  }
 });
 
 test('template set is complete and mirrors a target repository layout', () => {
@@ -107,6 +109,8 @@ test('template set is complete and mirrors a target repository layout', () => {
   ]) {
     assert.ok(isDirectory(path.join('templates', directory)), `templates/${directory} is missing`);
   }
+
+  assert.equal(typeof JSON.parse(read('templates/development-docs/design.json'))._comment, 'string');
 
   for (const file of ['decisions/TEMPLATE.md', 'architecture-plans/TEMPLATE.md']) {
     assert.equal(
@@ -270,7 +274,7 @@ test('INV-7: rule IDs are unique, and decision records and proposals are well fo
   }
 
   // Every rule ID cited anywhere in the live docs must be defined.
-  for (const file of ['AGENTS.md', 'README.md', 'features.md', ...filesUnder('development-docs'), ...filesUnder('tests')]) {
+  for (const file of ['AGENTS.md', 'README.md', ...filesUnder('development-docs'), ...filesUnder('tests')]) {
     if (!/\.(md|mjs)$/.test(file) || path.basename(file) === 'TEMPLATE.md') continue;
     for (const [id] of read(file).matchAll(/\b(?:HC|INV)-\d+\b/g)) {
       if (!defined.has(id)) problems.push(`${file}: cites ${id}, which is not defined`);

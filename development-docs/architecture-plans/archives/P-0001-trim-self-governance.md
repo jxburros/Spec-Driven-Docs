@@ -1,8 +1,8 @@
 # P-0001 — Trim this repository's own copy of the system
 
-- **Status:** Proposed
+- **Status:** Implemented
 - **Date:** 2026-11-12
-- **Approved by:** pending maintainer approval
+- **Approved by:** Jeffrey (maintainer), 2026-11-12
 - **Touches:** INV-1, INV-7 (test file lists only; no rule is broken)
 
 ## Why
@@ -38,3 +38,7 @@ Resulting root: `README.md`, `templates/`, `skills/`, `guides/`, plus a small se
 - The listed paths are gone from the root and present under `templates/`.
 - `npm test` passes.
 - A new adopter reading the root listing sees `README.md`, `templates/`, `skills/`, and `guides/` as the obvious entry points.
+
+## Outcome
+
+Implemented 2026-11-12 as proposed, with the recommended answer to each open choice: `features.md` deleted, the four live documents in `development-docs/` kept, no `examples/` folder. One addition beyond the listed document changes: the live `AGENTS.md` hierarchy and read-before table no longer list `design.json`, since this repository no longer has one.

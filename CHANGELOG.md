@@ -4,6 +4,32 @@
 ## 2026-11-12 — Agent: Claude Code (Claude)
 
 ### Changed
+- Implemented P-0001 (approved by the maintainer): removed this repository's own instances of the operational records from the root — `features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, `development-docs/research/`, `development-docs/design.json`. Their templates under `templates/` are unchanged. The root is now `README.md`, `templates/`, `skills/`, `guides/`, plus a small self-governance set.
+- `AGENTS.md`: removed those paths, the `features.md` rule, and `design.json` from the hierarchy and read-before table; added a rule not to recreate the records at the root.
+- `development-docs/architecture.md`, `developmentManifesto.md`, `coreIdentity.md`: updated the directory map, live-governance description, Definition of Done, and the operational-records concept to match.
+- `development-docs/productRoadmap.md`: shortened to current state, rejected directions, and open questions; added "growing this repository's own process" as a rejected direction, per the maintainer's stated direction.
+- `tests/docs-smoke.test.mjs`: the live-set test no longer expects the removed paths; a new test fails if any of them reappears at the root or goes missing from `templates/`.
+- P-0001 marked Implemented and moved to `development-docs/architecture-plans/archives/`.
+
+### Not completed
+- None for P-0001.
+- Still open from earlier entries: `HC-3` wording, version bump decision.
+
+### Notes
+- Validation: `npm test` passes (13 of 13 with `BASE_REF=origin/main`); the session hook runs and reports no open proposals.
+- P-0001's open choices were resolved with its recommendations: delete `features.md`, keep the four live documents, no `examples/` folder.
+- No decision records.
+
+### Handover
+- Next agent should start with: `AGENTS.md`.
+- Open questions: those in `development-docs/productRoadmap.md`, plus the `HC-3` wording.
+- Risks or assumptions: none.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
 - Fixed the session hook (`.claude/hooks/session-start.sh` and its copy in `templates/.claude/`): it reported "Open proposals: None" while P-0001 was Proposed, because a `|` alternation held in a shell variable is not honored by `case`. Status matching now uses `grep -E`.
 
 ### Not completed

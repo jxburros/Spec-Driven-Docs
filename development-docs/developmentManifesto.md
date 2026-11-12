@@ -52,7 +52,7 @@ This repository's product is guidance that other agents and maintainers will act
 
 ### Operational records
 
-`features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, and `development-docs/research/` are intentionally freeform. Do not impose a metadata schema on them unless the maintainer asks.
+The operational-record templates (`features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, `development-docs/research/`, `development-docs/design.json`) are intentionally freeform. Do not impose a metadata schema on them unless the maintainer asks. This repository keeps no instances of them at its root (P-0001).
 
 ---
 
@@ -99,7 +99,6 @@ A change is done only when all applicable items are true:
 - `README.md` is updated when setup, usage, layout, or contributor workflow changed.
 - `development-docs/architecture.md` is updated when structure, invariants, or checks changed.
 - `development-docs/productRoadmap.md` is updated only when version scope or direction changed.
-- `features.md` is updated when capability coverage changed.
 - Any proposal this change completes is marked Implemented and moved to `archives/`.
 - Before a pull request is opened, the maintainer was asked about a version bump.
 

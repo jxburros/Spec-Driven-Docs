@@ -34,18 +34,13 @@ development-docs/              Live governance for this repo
   developmentManifesto.md      Standards, rule ownership, Definition of Done
   architecture.md              This file; Invariants (INV-n)
   productRoadmap.md            Direction and rejected items
-  design.json                  Placeholder; no generated contract yet
   decisions/                   Decision records D-NNNN, TEMPLATE.md, archives/
   architecture-plans/          Proposals P-NNNN, TEMPLATE.md, archives/
-  research/                    Active curated research
 templates/                     The template set, mirroring a target repo's layout
 skills/                        Canonical source of the two portable skills
 guides/                        ai-guide.md and human-guide.md
 tests/                         node:test checks
 docs/index.html                Static project page (Pages deployment is paused)
-features.md, newFeatures.md    Capability inventory; idea intake
-current-checklist/             Working-period checklist and archives/
-audits/, human-qa/             QA records and archives/
 CHANGELOG.md                   Append-only project memory, newest first
 package.json                   Version source and the test script; no dependencies
 ```
@@ -67,7 +62,7 @@ Each is self-contained (`HC-2`) and paired with a guide (`HC-5`).
 
 ### Live governance (`development-docs/`, `AGENTS.md`, overlays)
 
-The same system, filled in for this repository. Rule ownership is listed in `development-docs/developmentManifesto.md`.
+The same system, filled in for this repository and deliberately small: the four governance documents, decision records, proposals, `AGENTS.md`, the overlays, and `CHANGELOG.md`. It keeps the product correct and serves as a worked example. The operational records (`features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, `research/`, `design.json`) exist only as templates. Rule ownership is listed in `development-docs/developmentManifesto.md`.
 
 ### Enforcement
 
