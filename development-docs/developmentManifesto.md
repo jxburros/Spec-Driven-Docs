@@ -14,12 +14,13 @@ This repository's product is guidance that other agents and maintainers will act
 
 ## 2. Core Development Principles
 
-1. **Smallest safe change.** Do what was asked. No unrelated refactors or speculative additions.
-2. **Evidence over invention.** Claims come from the repository or the maintainer. Unknowns are marked, not guessed.
-3. **One owner per rule.** A rule is stated in one document. Other documents point to it. If you are about to write a rule a second time, link instead.
-4. **Shorter and accurate beats longer and generic.** Agents read every line. Remove advice an agent would follow anyway.
-5. **Honest reporting.** Never claim validation that did not run. Record incomplete and blocked work.
-6. **Deviations are decisions.** A rule is either followed or overridden by an approved decision record. There is no third state.
+1. **Adopters first.** The product is `templates/`, `skills/`, and `guides/`. A change is worth making if it helps someone add the system to their own repository or keeps what they copy correct. Do not expand this repository's own process, records, or checks beyond what that requires.
+2. **Smallest safe change.** Do what was asked. No unrelated refactors or speculative additions.
+3. **Evidence over invention.** Claims come from the repository or the maintainer. Unknowns are marked, not guessed.
+4. **One owner per rule.** A rule is stated in one document. Other documents point to it. If you are about to write a rule a second time, link instead.
+5. **Shorter and accurate beats longer and generic.** Agents read every line. Remove advice an agent would follow anyway.
+6. **Honest reporting.** Never claim validation that did not run. Record incomplete and blocked work.
+7. **Deviations are decisions.** A rule is either followed or overridden by an approved decision record. There is no third state.
 
 ---
 

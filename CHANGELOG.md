@@ -4,6 +4,34 @@
 ## 2026-11-12 — Agent: Claude Code (Claude)
 
 ### Changed
+- Reoriented the repository toward adopters, at the maintainer's request: it should read as templates and instructions for adding the system to another repository, not as a project about developing itself.
+- `README.md` rewritten adopter-first: what you get, two ways to add it to your repository (a paste-ready agent instruction, or three copy commands), a "where to look" table by reader, and a single short section on contributing here.
+- `docs/index.html` text now describes adoption instead of this repository's own documents.
+- `development-docs/coreIdentity.md`: primary audience is stated as outside this repository; added "Not a project about developing itself" to What This Project Is Not.
+- `development-docs/developmentManifesto.md`: added "Adopters first" as the first development principle.
+- `AGENTS.md`: banner sending adopters to `README.md` and `templates/AGENTS.md`; Project Summary now names `templates/`, `skills/`, and `guides/` as the product and tells agents to keep this repo's own process small.
+- `skills/README.md`: removed a maintenance note about this repo's installed copy (it is in `AGENTS.md`).
+- Drafted `development-docs/architecture-plans/P-0001-trim-self-governance.md` (status Proposed).
+
+### Not completed
+- P-0001 is not implemented. It removes this repository's own operational-record instances from the root; that deletes files and changes structure, so it waits for maintainer approval.
+- Open items from the previous entry are unchanged (HC-3 wording, roadmap direction, version bump).
+
+### Notes
+- Validation: `npm test` and `BASE_REF=origin/main npm test` pass.
+- The agent instruction in the README assumes the repository is reachable at `https://github.com/jxburros/Spec-Driven-Docs`; this was not verified from an outside machine.
+- Proposal created: P-0001. No decision records.
+
+### Handover
+- Next agent should start with: P-0001; implement only if its status is Approved.
+- Open questions: the three open choices in P-0001.
+- Risks or assumptions: none beyond the above.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
 Implemented the eight changes from the system review, at the maintainer's request. The goal of all eight: every rule is either followed or overridden by a recorded decision, and what can be checked mechanically is checked.
 
 1. **Decision log.** Added `development-docs/decisions/` with `TEMPLATE.md` and `archives/`. An approved deviation from a rule is written as `D-NNNN-title.md` before implementation, naming the rule, scope, approving maintainer, and review date.

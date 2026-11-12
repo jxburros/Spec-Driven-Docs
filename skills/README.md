@@ -14,8 +14,6 @@ Both skills are self-contained: they can be copied into any repository (or a sha
 - `spec-driven-development` owns the procedures: session start, change workflow, decision records for approved deviations (`development-docs/decisions/`), per-change proposals (`development-docs/architecture-plans/`), the changelog entry format, and the completion report. The gates it relies on (instruction hierarchy, read-before table, stop-and-ask list) live in the target repo's `AGENTS.md`.
 - `spec-driven-docs-setup` covers copying `templates/` into a repo, filling the documents from evidence, numbering Hard Constraints (`HC-n`) and Architectural Invariants (`INV-n`), and installing the skills, the session hook, and the changelog CI check.
 
-`skills/` is the canonical source. This repo's `.claude/skills/` is an installed copy kept identical by `npm test`; after editing a skill, run `cp -r skills/. .claude/skills/`.
-
 ## Installing the skills
 
 Each skill is a folder containing a `SKILL.md` file with YAML frontmatter (`name`, `description`) followed by plain markdown instructions. This is the [Agent Skills](https://code.claude.com/docs/en/skills) format used by Claude Code, but the body is ordinary markdown that any LLM tool can consume.

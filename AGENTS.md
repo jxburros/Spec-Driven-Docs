@@ -4,6 +4,8 @@
 >
 > Tool overlays (`CLAUDE.md`, `.github/copilot-instructions.md`) defer to this file.
 >
+> **Adopting Spec-Driven Docs in your own repository?** This file governs work on the Spec-Driven-Docs repository itself. You want `README.md` and `templates/AGENTS.md`.
+>
 > This file holds the **gates and repo facts**: precedence, what to read, when to stop, commands, paths, gotchas. The **procedures** (change workflow, changelog format, decision records, proposals, reporting) live once, in the `spec-driven-development` skill. Rules are not restated across files — follow the pointers.
 
 ---
@@ -80,8 +82,9 @@ Both procedures and their file formats are in the skill.
 
 Spec-Driven-Docs is a documentation-first governance framework and template repository for AI-assisted and human-led software projects. It distributes document templates (`templates/`) and two portable agent skills (`skills/`), and it governs itself with a filled-in copy of the same system (`development-docs/`).
 
-- `templates/` is the product. Its placeholders are intentional.
-- `development-docs/` is this repo's real governance. It must not contain placeholders.
+- `templates/`, `skills/`, and `guides/` are the product: what adopters copy and read. Judge every change by whether it helps someone add the system to their own repository. Their placeholders are intentional.
+- Everything else exists to keep the product correct and to serve as a worked example. Keep it small; do not grow this repo's own process for its own sake.
+- `development-docs/` is this repo's own filled-in copy. It must not contain placeholders.
 - There is no application runtime. The only executable code is the zero-dependency test suite, the CI workflow, and the session hook.
 
 ---

@@ -30,11 +30,13 @@ AI coding agents fill gaps in their knowledge with plausible guesses. This proje
 
 ## 3. Target Users
 
+The primary audience is outside this repository:
+
 - **Maintainers and team leads** adopting the system in a new or existing repository.
-- **AI coding agents** (Claude Code, GitHub Copilot, Codex, and others) working in a repository that uses it.
+- **AI coding agents** (Claude Code, GitHub Copilot, Codex, and others) setting the system up in, or working in, a repository that uses it.
 - **Human contributors** in those repositories.
 
-<!-- Secondary audiences that should not drive the design: not yet defined. Maintainer to fill in. -->
+Contributors to this repository itself are a secondary audience and should not drive the design.
 
 ---
 
@@ -62,6 +64,7 @@ Agents must not:
 ## 6. What This Project Is Not
 
 - **Not an application, library, or CLI.** There is nothing to build, install, or deploy.
+- **Not a project about developing itself.** Its purpose is to be added to other repositories. This repository's own governance exists only to keep the templates and skills correct and to serve as a worked example; it must stay small and must not crowd out adopter-facing material.
 - **Not an issue tracker or sprint board.** Granular task tracking belongs in an issue tracker.
 <!-- Further anti-goals: not yet defined. Maintainer to fill in. -->
 
