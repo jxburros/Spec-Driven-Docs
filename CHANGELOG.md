@@ -4,6 +4,25 @@
 ## 2026-11-12 — Agent: Claude Code (Claude)
 
 ### Changed
+- Fixed the session hook (`.claude/hooks/session-start.sh` and its copy in `templates/.claude/`): it reported "Open proposals: None" while P-0001 was Proposed, because a `|` alternation held in a shell variable is not honored by `case`. Status matching now uses `grep -E`.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: ran the hook with P-0001 present (listed), and with a temporary Active decision record and an Approved proposal (both listed); `npm test` passes.
+- The earlier hook check on this date only exercised the single-pattern decision-record path, which is why the defect was missed.
+
+### Handover
+- Next agent should start with: P-0001; implement only if its status is Approved.
+- Open questions: unchanged from the previous entry.
+- Risks or assumptions: none.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
 - Reoriented the repository toward adopters, at the maintainer's request: it should read as templates and instructions for adding the system to another repository, not as a project about developing itself.
 - `README.md` rewritten adopter-first: what you get, two ways to add it to your repository (a paste-ready agent instruction, or three copy commands), a "where to look" table by reader, and a single short section on contributing here.
 - `docs/index.html` text now describes adoption instead of this repository's own documents.

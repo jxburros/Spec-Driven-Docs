@@ -12,30 +12,28 @@ echo "1. Invoke the spec-driven-development skill (/spec-driven-development)."
 echo "2. Follow AGENTS.md: instruction hierarchy, read-before table, stop-and-ask gates."
 echo "3. A deviation from an HC-n / INV-n rule needs an approved decision record first."
 
-# Print "<id and title> [<status>]" for record files whose Status matches a pattern.
+# Print "<id and title> [<status>]" for record files whose Status matches an extended regex.
 list_records() {
   dir=$1; prefix=$2; pattern=$3; found=0
   for f in "$dir"/"$prefix"-*.md; do
     [ -f "$f" ] || continue
     status=$(sed -n 's/^- \*\*Status:\*\* *//p' "$f" | head -n 1)
-    case "$status" in
-      $pattern)
-        title=$(sed -n 's/^# *//p' "$f" | head -n 1)
-        echo "- $title [$status] ($f)"
-        found=1
-        ;;
-    esac
+    if printf '%s\n' "$status" | grep -Eq "$pattern"; then
+      title=$(sed -n 's/^# *//p' "$f" | head -n 1)
+      echo "- $title [$status] ($f)"
+      found=1
+    fi
   done
   [ "$found" -eq 1 ] || echo "- None."
 }
 
 echo
 echo "### Active decision records (approved deviations)"
-list_records development-docs/decisions D 'Active*'
+list_records development-docs/decisions D '^Active'
 
 echo
 echo "### Open proposals"
-list_records development-docs/architecture-plans P 'Proposed*|Approved*'
+list_records development-docs/architecture-plans P '^(Proposed|Approved)'
 
 if [ -f CHANGELOG.md ]; then
   echo
