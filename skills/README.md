@@ -9,19 +9,12 @@ This directory contains two reusable skills for AI coding agents (Claude, Copilo
 
 Both skills are self-contained: they can be copied into any repository (or a shared skills location) without the rest of this repo.
 
-## Operational records covered by the skills
+## What the skills cover
 
-The skills also understand the repository's supporting records:
+- `spec-driven-development` owns the procedures: session start, change workflow, decision records for approved deviations (`development-docs/decisions/`), per-change proposals (`development-docs/architecture-plans/`), the changelog entry format, and the completion report. The gates it relies on (instruction hierarchy, read-before table, stop-and-ask list) live in the target repo's `AGENTS.md`.
+- `spec-driven-docs-setup` covers copying `templates/` into a repo, filling the documents from evidence, numbering Hard Constraints (`HC-n`) and Architectural Invariants (`INV-n`), and installing the skills, the session hook, and the changelog CI check.
 
-- `development-docs/design.json` is a placeholder until a design-contract app generates the styling contract.
-- `development-docs/research/` remains active for curated research.
-- `development-docs/architecture-plans/` holds feature-specific plans; agents ask before creating new plans and may archive completed, tested plans.
-- `current-checklist/currentChecklist.md` is an organizational sprint aid, not a scope gate.
-- `audits/` and `human-qa/` hold automated and human QA records; fully processed reports may move to their archive folders.
-- `features.md` is a granular checklist of capabilities believed to be implemented, whether tested or not.
-- `newFeatures.md` retains the historical intake of ideas promoted to the roadmap or current checklist.
-
-Before opening a pull request, agents must ask whether the authoritative `package.json` version should receive a patch, minor, or major bump.
+`skills/` is the canonical source. This repo's `.claude/skills/` is an installed copy kept identical by `npm test`; after editing a skill, run `cp -r skills/. .claude/skills/`.
 
 ## Installing the skills
 
@@ -33,7 +26,7 @@ Copy the skill folders into the repo's `.claude/skills/` directory (project-leve
 
 ```bash
 mkdir -p .claude/skills
-cp -r skills/spec-driven-development skills/spec-driven-docs-setup .claude/skills/
+cp -r /path/to/Spec-Driven-Docs/skills/. .claude/skills/
 ```
 
 Claude discovers them automatically; invoke with `/spec-driven-development` or `/spec-driven-docs-setup`, or Claude will use them when the task matches the description.
@@ -42,7 +35,7 @@ Claude discovers them automatically; invoke with `/spec-driven-development` or `
 
 Options, in order of preference:
 
-1. **Reference from the agent's instruction file.** Add a line to `AGENTS.md` (or the tool's equivalent) such as: "When developing in this repo, follow `skills/spec-driven-development/SKILL.md`. When setting up or completing the spec-driven docs, follow `skills/spec-driven-docs-setup/SKILL.md`."
+1. **Reference from the agent's instruction file.** Install the skills under `.claude/skills/` as above; the template `AGENTS.md` ("Start Here") and the Copilot overlay already point agents at `.claude/skills/spec-driven-development/SKILL.md`.
 2. **Paste the SKILL.md body into the conversation** when you want the agent to perform that task.
 3. **Use the tool's native skill/rule mechanism** (e.g. Cursor rules, Copilot instructions) and point it at the file or copy the content in.
 

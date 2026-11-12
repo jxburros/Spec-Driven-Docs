@@ -1,436 +1,145 @@
-# AGENTS.md — General Agent Instructions
+# AGENTS.md — Agent Instructions
 
-> **Canonical AI-agent instruction source**
+> **Canonical instruction source for every AI agent and contributor in this repository.**
 >
-> This is the primary instruction document for AI agents, coding assistants, automation tools, and human-assisted development agents working in this repository.
+> Tool overlays (`CLAUDE.md`, `.github/copilot-instructions.md`) defer to this file.
 >
-> Tool-specific files such as `CLAUDE.md` and `.github/copilot-instructions.md` should defer to this file unless they explicitly describe tool-specific behavior. Those files must reference the Instruction Hierarchy in Section 1 instead of redefining it.
+> This file holds the **gates and repo facts**: precedence, what to read, when to stop, commands, paths, gotchas. The **procedures** (change workflow, changelog format, decision records, proposals, reporting) live once, in the `spec-driven-development` skill. Rules are not restated across files — follow the pointers.
 
 ---
 
-## How to Use This Template  
-**Status: Keep and customize**
+## 1. Start Here
 
-This file is a hybrid static instruction document and repo-specific template.
+1. Load the development skill before reading the governance documents:
+   - Claude Code: run `/spec-driven-development` (installed in `.claude/skills/`).
+   - Other agents: read `skills/spec-driven-development/SKILL.md`.
+2. Read the newest `CHANGELOG.md` entry's **Handover**, the active records in `development-docs/decisions/`, and open proposals in `development-docs/architecture-plans/`. In Claude Code the SessionStart hook prints these.
+3. Read the documents your task requires (Section 3).
 
-- **Usually keep** sections should be copied forward with minimal changes.
-- **Customize** sections should be adapted for this repository.
-- **Optional** sections should be included only if relevant.
-- **Required for AI-agent-assisted repos** sections should remain when agents are expected to make code, doc, test, or workflow changes.
+When asked to set up Spec-Driven Docs in another repository, use the `spec-driven-docs-setup` skill instead.
 
 ---
 
-## 1. Instruction Hierarchy  
-**Status: Usually keep**
+## 2. Instruction Hierarchy
 
-When working in this repository, agents must follow this instruction hierarchy:
+Highest precedence first:
 
-1. User request
+1. The user's explicit request
 2. `development-docs/coreIdentity.md`
-3. `development-docs/design.json` for UI and styling work, when it contains a generated design contract
+3. `development-docs/design.json` — UI and styling work only, and only once generated
 4. `development-docs/developmentManifesto.md`
 5. `development-docs/architecture.md`
-6. Relevant plans in `development-docs/architecture-plans/` for structural decisions, when present
+6. Approved proposals in `development-docs/architecture-plans/`
 7. `development-docs/productRoadmap.md`
 8. `AGENTS.md`
-9. Tool-specific files such as `CLAUDE.md` or `.github/copilot-instructions.md`
+9. Tool-specific overlays
 10. Existing code, tests, and documentation patterns
 
-If these sources conflict, do not silently choose one. Identify the conflict, make the smallest safe decision available, and document the issue clearly.
+An **Active** decision record in `development-docs/decisions/` overrides the specific rule it names, within the scope it states, and nothing else.
+
+If sources conflict, do not silently choose one. Name the conflict, make the smallest safe decision, and record it.
 
 ---
 
-## 2. Required Documentation Access  
-**Status: Usually keep**
+## 3. Read Before You Change
 
-At minimum:
+Read only what the task requires.
 
-- Read `development-docs/coreIdentity.md` before making code, architecture, product, UX, workflow, or documentation changes.
-- Consult `development-docs/developmentManifesto.md` when changing development behavior, quality standards, AI behavior, testing expectations, automation, or contributor workflow.
-- Consult `development-docs/architecture.md` before changing project structure, module boundaries, data flow, storage, persistence, build/runtime behavior, external integrations, or generated artifact formats.
-- Consult `development-docs/design.json` before UI or styling work when it contains a generated design contract. The placeholder file is not a design contract and must not be filled in by agents.
-- Check `development-docs/architecture-plans/` before structural decisions. If a relevant plan exists, follow it; if no plan exists and the decision needs more guidance or choices, pause and ask before creating one.
-- Consult `development-docs/productRoadmap.md` before implementing new product capabilities, changing version scope, or making directional product decisions.
-
-If a referenced document is missing, proceed with the available context, but document the missing file in `CHANGELOG.md`.
-
----
-
-## 3. Document Decision Tree  
-**Status: Usually keep**
-
-| Task Type | Required Context |
+| Task | Read first |
 |---|---|
-| Any meaningful change | `development-docs/coreIdentity.md` |
-| New feature, tool, or user-facing capability | `development-docs/productRoadmap.md` |
-| Refactor, file navigation, system restructuring, or dependency changes | `development-docs/architecture.md` |
-| UI or styling work | `development-docs/design.json` when generated, plus relevant identity and architecture context |
-| Structural decision needing feature-specific guidance | Relevant `development-docs/architecture-plans/` plan, or ask before creating one |
-| AI behavior, automation, testing, QA, safety, or development-process changes | `development-docs/developmentManifesto.md` |
-| Setup, usage, configuration, scripts, commands, or public behavior | `README.md` |
-| Meaningful completed work, incomplete work, or blocked work | `CHANGELOG.md` |
-| Agent-specific behavior | `AGENTS.md`, then tool-specific files |
+| Any meaningful change | `development-docs/coreIdentity.md` — "What This Project Is Not" and Hard Constraints (`HC-n`) |
+| Changing behavior, process, tests, CI, or agent rules | + `development-docs/developmentManifesto.md` |
+| Changing structure, file layout, skills, hooks, or checks | + `development-docs/architecture.md` — Directory Map and Invariants (`INV-n`) |
+| Structural decision or new capability | + `development-docs/architecture-plans/`; if no proposal covers it, draft one (Section 4) |
+| New feature or change of direction | + `development-docs/productRoadmap.md` — current focus and Rejected list |
+| UI or styling work | + `development-docs/design.json`, only if it holds a generated contract |
+| Editing a template | + the "How to Use This Template" section of that file under `templates/` |
 
 ---
 
-## 4. Document Mission Table  
-**Status: Usually keep**
+## 4. Stop and Ask
 
-| Document | Agent Mission |
-|---|---|
-| `development-docs/coreIdentity.md` | **Guardrails:** Understand what the project is, what it protects, who it serves, and what it must not become. |
-| `development-docs/developmentManifesto.md` | **Standards:** Understand how the project should be developed, validated, documented, and maintained. |
-| `development-docs/architecture.md` | **Navigation and truth:** Understand the current system structure, data flow, module boundaries, and integration points. |
-| `development-docs/design.json` | **Visual contract:** Follow generated styling and design rules for UI work. The placeholder is not authoritative. |
-| `development-docs/architecture-plans/` | **Decision guidance:** Consult existing feature-specific structural plans; archive plans after implementation and testing. |
-| `development-docs/productRoadmap.md` | **Version direction:** Understand the current version focus and planned future versions without treating the roadmap as a task tracker. |
-| `features.md` | **Capability inventory:** Maintain a granular checklist of capabilities believed to be implemented, whether tested or not. |
-| `newFeatures.md` | **Historical intake:** Preserve feature ideas that may later move into the roadmap or current checklist. |
-| `current-checklist/currentChecklist.md` | **Working context:** Organize the current sprint or working period; it is not a scope gate. |
-| `README.md` | **Public entry point:** Keep setup, usage, features, and contributor-facing information accurate. |
-| `CHANGELOG.md` | **Project memory:** Record meaningful changes, incomplete work, and continuity across development sessions. |
-| `AGENTS.md` | **General agent rules:** Follow shared operating instructions for all agents. |
-| `CLAUDE.md` | **Claude overlay:** Follow Claude-specific expectations after applying `AGENTS.md`. |
-| `.github/copilot-instructions.md` | **GitHub Copilot overlay:** Follow Copilot-specific expectations after applying `AGENTS.md`. |
+Stop before implementing, state what you found, and ask the maintainer when:
+
+- The request breaks a Hard Constraint (`HC-n`) or an Architectural Invariant (`INV-n`).
+- The request implements something the roadmap lists as Rejected / Out of Scope.
+- The request contradicts a manifesto rule or an approved proposal.
+- The task is ambiguous between approaches with different structural consequences.
+- The change is destructive or hard to reverse and was not explicitly requested.
+
+Then:
+
+- **Deviation approved** → write a decision record in `development-docs/decisions/` *before* implementing. A deviation without a record is a defect, however well it works.
+- **Structural change or new capability with no proposal** → draft a short proposal in `development-docs/architecture-plans/` with status `Proposed` and wait for approval. Do not ask whether to write one; write it.
+
+Both procedures and their file formats are in the skill.
 
 ---
 
-## 5. Project Summary  
+## 5. Project Summary
 
-Spec-Driven-Docs is a documentation-first governance framework and template repository for AI-assisted and human-led software projects.
+Spec-Driven-Docs is a documentation-first governance framework and template repository for AI-assisted and human-led software projects. It distributes document templates (`templates/`) and two portable agent skills (`skills/`), and it governs itself with a filled-in copy of the same system (`development-docs/`).
 
-It exists to give AI coding agents accurate, structured, hierarchical context about any project — replacing inference with explicit documents that define what the project is, how it should be built, and where it is going.
-
-The project should help maintainers, developers, and AI agents by providing ready-to-use document templates and portable skills, especially when AI coding assistants are active contributors to a repo.
-
-Important project context:
-
-- The documents in `development-docs/` are intentionally templates containing placeholder text — they are the product this repo distributes, not completed governance documents for this repo itself.
-- This repo is documentation-only: no application runtime, build artifact, or user-facing product.
-- The skills in `skills/` are portable and self-contained — they work when copied to any repo independently of the rest of this repo.
-- `guides/ai-guide.md` and `guides/human-guide.md` are the full reference companions to the two skills.
-
-Agents should keep the project aligned with `development-docs/coreIdentity.md`.
+- `templates/` is the product. Its placeholders are intentional.
+- `development-docs/` is this repo's real governance. It must not contain placeholders.
+- There is no application runtime. The only executable code is the zero-dependency test suite, the CI workflow, and the session hook.
 
 ---
 
-## 6. Non-Negotiable Project Values  
+## 6. Repo Rules
 
-Agents must preserve these values:
+The non-negotiables are `HC-1`…`HC-5` in `development-docs/coreIdentity.md` and `INV-1`…`INV-8` in `development-docs/architecture.md`. Rules specific to day-to-day editing:
 
-- **Template accuracy:** documents in `development-docs/` must remain useful templates — placeholder sections are intentional and must not be replaced with invented content.
-- **Skill portability:** the two skills in `skills/` must remain self-contained and work when copied to any repo without this repo's supporting files.
-- **Document consistency:** when a skill or guide changes, all referencing files must be updated in the same change. Skills and guides are pairs; keep them in sync.
-- **No runtime dependencies:** do not add build steps, application infrastructure, or runtime configuration to this repo.
-- **Honest uncertainty:** never fill a template placeholder with invented content — use an explanatory comment to mark what is unknown.
-
-If a requested change conflicts with these values, identify the conflict before implementing.
-
-- **Capability traceability:** keep `features.md` current when a capability is added, removed, or materially changed; do not claim testing merely because a capability is listed.
-- **Generated design authority:** treat `development-docs/design.json` as agent-readable styling authority only after the design-contract app has generated it.
+- Status labels (`**Status: Required**` etc.), bracketed placeholders, and "How to Use This Template" sections in `templates/` are part of the template format. Do not remove them or fill them in.
+- A change to a skill must be mirrored in its guide in the same commit, and the reverse: `skills/spec-driven-development/SKILL.md` ↔ `guides/ai-guide.md`, `skills/spec-driven-docs-setup/SKILL.md` ↔ `guides/human-guide.md`.
+- After editing anything under `skills/`, copy it to `.claude/skills/` (command below). After editing `.claude/hooks/` or `.claude/settings.json`, copy to `templates/.claude/`.
+- When a live governance rule changes shape (a new section, ID scheme, or record type), make the matching change to the template under `templates/`.
+- `features.md` is an inventory of capabilities believed to exist, not a test report. Update it when coverage changes.
+- `package.json` is the authoritative version. Before opening a pull request, ask the maintainer whether to bump it and by how much. Do not decide alone.
 
 ---
 
-## 7. Required Change Workflow  
-**Status: Usually keep**
-
-For every meaningful task:
-
-1. Align with context. Read the required starting docs for the task type.
-2. Identify the governing principles. Note which project values or manifesto rules apply.
-3. Inspect relevant files. Do not make blind changes.
-4. Make the smallest safe change. Preserve existing behavior unless the request requires changing it.
-5. Avoid unrelated refactors. Do not expand scope without a clear reason.
-6. Validate appropriately. Run relevant tests, checks, builds, or manual verification when possible.
-7. Update documentation. Keep `README.md`, `architecture.md`, and other docs accurate when affected.
-8. Update `CHANGELOG.md`. Record completed work, incomplete work, and important notes.
-9. Report honestly. Do not claim completion for skipped, blocked, or unverified work.
-
-When given multiple requested tasks:
-
-- Attempt to complete as many as feasible in the current pass.
-- Prefer completing the full requested scope when safe and reasonable.
-- Do not stop after one task unless blocked.
-- If one task is blocked, continue with other tasks that can be completed.
-- Document incomplete or blocked items in `CHANGELOG.md`.
-
----
-
-## 8. Architecture Source-of-Truth Rules  
-**Status: Usually keep**
-
-`development-docs/architecture.md` is a living source of truth for the current architecture.
-
-Consult it before changing:
-
-- Project structure
-- Module boundaries
-- Data flow
-- Storage, persistence, sync, or caching behavior
-- External services or integrations
-- AI-provider architecture
-- Security boundaries
-- Build, runtime, deployment, packaging, or execution architecture
-- Generated artifact formats
-- Configuration schema or precedence
-- Public APIs, commands, routes, workflows, or integration contracts
-
-Update `architecture.md` carefully when actual architecture changes.
-
-Do not update `architecture.md` for every small code edit. Do not turn it into a roadmap, changelog, or exhaustive file inventory.
-
----
-
-## 9. Product Roadmap Rules  
-**Status: Usually keep**
-
-`development-docs/productRoadmap.md` is a version-oriented direction document.
-
-It is not a sprint board, PR checklist, daily task tracker, changelog, or substitute for issue tracking.
-
-Consult the roadmap when implementing a new feature, changing product scope, choosing between competing approaches, deciding whether a feature belongs in the current version, or considering future compatibility.
-
-Do not update the roadmap for ordinary implementation progress.
-
-Update `productRoadmap.md` only when version scope or product direction changes.
-
-Use `CHANGELOG.md` for completed work. Use issue trackers for granular tasks. Use `architecture.md` for current system structure.
-
-### Version and Pull Request Rules
-
-`package.json` is the authoritative version source for this repository. Before opening a pull request, ask the maintainer whether the change should bump the version. If a bump is approved, ask whether it should be patch, minor, or major before changing the version. Do not change the version or open the pull request until that decision is clear. Keep `package-lock.json` synchronized when its root package metadata mirrors the version.
-
----
-
-## 10. Changelog Rules
-**Status: Usually keep**
-
-Every meaningful development session must update `CHANGELOG.md` (exact uppercase filename).
-
-If `CHANGELOG.md` does not exist, create it.
-
-The changelog must be iterative and append-only.
-
-Never delete previous entries or rewrite history to hide incomplete work.
-
-### Standardized Agent Identity Format
-
-Use this heading format for all contributors and models:
-
-```markdown
-## YYYY-MM-DD — Agent: <Tool Name> (<Model Name>)
-```
-
-Examples:
-- `Agent: OpenAI Codex (GPT-5.3-Codex)`
-- `Agent: Claude Code (Claude)`
-- `Agent: GitHub Copilot (Copilot)`
-
-Use this body format unless the repository already has a clear changelog convention:
-
-```markdown
-### Changed
-- ...
-
-### Not completed
-- ...
-
-### Notes
-- ...
-
-### Handover
-- Next agent should start with: ...
-- Open questions: ...
-- Risks or assumptions: ...
-```
-
-If everything requested was completed, write:
-
-```markdown
-### Not completed
-- None.
-```
-
-Record incomplete, blocked, skipped, or unverified work honestly.
-
----
-
-## 11. README Rules  
-**Status: Usually keep**
-
-Update `README.md` when a change materially affects how the project is used, configured, understood, or operated.
-
-Material changes include setup instructions, required dependencies, required secrets, workflow behavior, config schema, commands, scripts, feature availability, user-facing behavior, generated artifacts, AI behavior, external integrations, state handling, safety limitations, known limitations, and contributor workflow.
-
-Do not update `README.md` for purely internal refactors unless they change how users, maintainers, contributors, or future agents interact with the project.
-
----
-
-## 12. Testing and Verification  
-**Status: Usually keep**
-
-Run relevant validation after changes whenever possible.
-
-Appropriate validation may include unit tests, integration tests, end-to-end tests, type checks, linting, build checks, script dry runs, config validation, manual UI verification, generated artifact inspection, and documentation review.
-
-Do not claim that something was tested if it was not tested.
-
-If validation cannot be run, document that honestly in `CHANGELOG.md` under `Not completed` or `Notes`.
-
----
-
-## 13. Safety, Privacy, and Data Rules  
-**Status: Customize; required for user-data, automation, AI, cross-repo, deployment, or private-repo projects**
-
-Do not introduce default behavior that deletes user data, deletes repository files, pushes code changes to external repositories, modifies production systems, deploys automatically without explicit intent, runs destructive commands, hides failures, suppresses important logs, leaks secrets, sends unnecessary private data to external services, creates excessive duplicate issues, or treats AI guesses as verified facts.
-
-Any destructive, mutating, external, or cross-repo behavior must be explicit, documented, opt-in, reviewable, scoped, safe by default, and reversible where possible.
-
-Secrets must not appear in logs, reports, generated artifacts, AI prompts, issue bodies, error messages, changelog entries, or README examples.
-
----
-
-## 14. AI Behavior Rules  
-**Status: Customize; required for AI-assisted repos**
-
-When working with AI-related code, prompts, model configuration, generated analysis, deduplication, recommendations, or agent workflows:
-
-- Keep AI grounded in collected evidence.
-- Make uncertainty explicit.
-- Prevent invented facts.
-- Prefer structured outputs when downstream code consumes AI results.
-- Keep human-readable summaries clear.
-- Keep AI optional when the project identity requires it.
-- Preserve no-AI or report-only operation where practical.
-- Keep provider-specific logic isolated where possible.
-- Do not allow AI output to override human decisions without explicit design.
-- Do not present AI guesses as verified test results.
-
----
-
-## 15. Domain-Specific Rules  
-
-### Skill Usage
-
-When working in this repository:
-
-- **Before reading the development documents, invoke the `spec-driven-development` skill.** For Claude Code: run `/spec-driven-development` at the start of the session. For other agents: read `skills/spec-driven-development/SKILL.md` before consulting the governance documents.
-- When asked to set up Spec-Driven Docs in another repository: invoke the `spec-driven-docs-setup` skill (`/spec-driven-docs-setup` in Claude Code, or read `skills/spec-driven-docs-setup/SKILL.md`). The setup skill includes steps to copy and install both skills in the target repo — complete those steps.
-
-### Template Rules
-
-- Status labels (`**Status: Required**`, `**Status: Customize**`, etc.) in the template files are part of the template format — do not remove or alter them.
-- Placeholder text in brackets (`[Project Name]`, `[Rule 1]`, etc.) is intentional template content. Never replace it with invented content in the source template files.
-- When editing a template, preserve the "How to Use This Template" section at the top — new adopters rely on it.
-
-### Skill and Guide Sync
-
-- `skills/spec-driven-development/SKILL.md` corresponds to `guides/ai-guide.md`. Changes to one must be reflected in the other.
-- `skills/spec-driven-docs-setup/SKILL.md` corresponds to `guides/human-guide.md`. Changes to one must be reflected in the other.
-
-### Operational Documentation Rules
-
-- `features.md` is a simple, granular inventory of capabilities believed to be implemented. Agents should update it automatically when feature coverage changes; a listed feature does not mean it has passed QA.
-- `newFeatures.md` is historical intake. Keep entries after they are promoted into the roadmap or current checklist.
-- `current-checklist/currentChecklist.md` is an organizational aid for the current sprint or working period. It does not limit work and should not be treated as a source of product scope.
-- `audits/` contains automated audits; `human-qa/` contains human-run QA. Once the useful information has been fully processed, the source report may be moved into its matching `archives/` folder.
-- `development-docs/research/` contains curated, active research and is not automatically archived.
-- `development-docs/architecture-plans/` contains feature-specific structural plans. Agents must ask before creating a new plan; a fully implemented and tested plan may be moved into `archives/`.
-- These records are intentionally freeform and may use different file formats. Do not impose a universal metadata schema unless the maintainer asks for one.
-
----
-
-## 16. Code Style  
-**Status: Usually keep and customize as needed**
-
-Prefer clear maintainable code, small focused functions, explicit parameters, helpful error messages, defensive parsing, predictable paths, consistent generated output, backward-compatible changes where practical, comments for non-obvious logic, and existing project conventions.
-
-Avoid large unrelated rewrites, silent failures, hidden magic, hardcoded assumptions that conflict with project direction, secret exposure, duplicated logic, brittle parsing, vague errors, mixing unrelated concerns, and over-abstracting before patterns are real.
-
----
-
-## 17. Completion Checklist  
-**Status: Usually keep**
-
-Before finishing a task, confirm:
-
-- [ ] `development-docs/coreIdentity.md` was considered.
-- [ ] `development-docs/developmentManifesto.md` was consulted when relevant.
-- [ ] `development-docs/architecture.md` was consulted when relevant.
-- [ ] `development-docs/productRoadmap.md` was consulted when relevant.
-- [ ] The requested change was implemented as directly and safely as possible.
-- [ ] Existing behavior was preserved unless intentionally changed.
-- [ ] Relevant validation was run, or skipped validation was documented.
-- [ ] `CHANGELOG.md` was appended to or created.
-- [ ] `README.md` was updated if user-facing behavior, setup, usage, commands, configuration, or workflow changed.
-- [ ] `development-docs/architecture.md` was updated if architecture changed.
-- [ ] `development-docs/productRoadmap.md` was updated only if version scope or product direction changed.
-- [ ] `features.md` was updated when feature coverage changed.
-- [ ] If opening a pull request, the maintainer was asked whether `package.json` should receive a patch, minor, or major version bump.
-- [ ] Any incomplete, blocked, or intentionally skipped work was documented.
-- [ ] Definition of Done from `development-docs/developmentManifesto.md` was satisfied or exceptions were documented.
-- [ ] `CHANGELOG.md` includes `Handover` notes when useful for the next agent.
-
----
-
-## 18. Final Response Expectations  
-**Status: Usually keep**
-
-When reporting completion, summarize what changed, which files changed, whether `README.md` and `CHANGELOG.md` were updated, whether `architecture.md` was updated if relevant, which `development-docs/` files were consulted, what validation was run, what could not be completed, and any useful next step.
-
-Do not hide limitations. Do not claim validation was performed if it was not.
-
----
-
-## 19. Custom Repo Instructions  
-
-### Important Commands
+## 7. Commands
 
 ```bash
-npm install     # install test dependencies
-npm test        # smoke tests: required files present, markdown links resolve
+npm test                                   # all checks; no install needed
+BASE_REF=origin/main npm test              # also require a new CHANGELOG entry vs. main (what CI runs)
+cp -r skills/. .claude/skills/             # sync installed skills after editing skills/
+cp -r .claude/hooks .claude/settings.json templates/.claude/   # sync hook into the template set
 ```
 
-### Important Paths
+---
+
+## 8. Important Paths
 
 | Path | Purpose |
 |---|---|
-| `skills/spec-driven-development/SKILL.md` | Portable skill for development work in any repo using Spec-Driven Docs |
-| `skills/spec-driven-docs-setup/SKILL.md` | Portable skill for setting up Spec-Driven Docs in a new or existing repo |
-| `skills/README.md` | Installation instructions for each skill per agent tool |
-| `development-docs/` | Template documents — intentionally contain placeholders |
-| `development-docs/design.json` | Placeholder for the app-generated styling contract; do not invent content |
-| `development-docs/research/` | Active curated research for features and processes |
-| `development-docs/architecture-plans/` | Feature-specific structural plans and their `archives/` folder |
-| `current-checklist/currentChecklist.md` | Current sprint or working-period organizational checklist |
-| `audits/` | Automated audit reports and processed-report archives |
-| `human-qa/` | Human-run QA reports and processed-report archives |
-| `features.md` | Granular checklist of capabilities believed to be implemented |
-| `newFeatures.md` | Historical intake list for possible roadmap or checklist promotion |
-| `guides/ai-guide.md` | Full AI agent reference (corresponds to `spec-driven-development` skill) |
-| `guides/human-guide.md` | Full human setup guide (corresponds to `spec-driven-docs-setup` skill) |
-
-### Known Gotchas
-
-- The `development-docs/` files are intentionally filled with placeholders — agents must not replace them with invented content.
-- Editing SKILL.md files requires corresponding updates to the guides, and vice versa. Always check both when changing either.
-- `npm test` checks required file presence and link resolution; run it after moving or renaming any file.
-- `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` in this repo are both templates (meant to be copied) and live governance documents — they contain "How to Use This Template" guidance alongside real operating instructions.
-
-### Additional Gotchas
-
-- `development-docs/design.json` is intentionally only a placeholder until a design-contract app generates it.
-- `features.md` is an implementation inventory, not a test report; list capabilities that are believed to exist even when QA is incomplete.
-- Archive folders preserve processed source material; research remains active unless the maintainer establishes a separate archive policy.
-
-### Maintainer Preferences
-
-- Keep the `spec-driven-development` and `spec-driven-docs-setup` skills in sync with `guides/ai-guide.md` and `guides/human-guide.md` respectively.
-- When adding a new feature to the doc system, update both the skill and the guide for that feature in the same commit.
+| `templates/` | The distributable template set, laid out as it should land in a target repo |
+| `development-docs/` | This repo's live governance documents |
+| `development-docs/decisions/` | Decision records for approved deviations (`D-NNNN-title.md`); `TEMPLATE.md` is the format |
+| `development-docs/architecture-plans/` | Change proposals (`P-NNNN-title.md`); `TEMPLATE.md` is the format |
+| `development-docs/research/` | Active curated research; not auto-archived |
+| `skills/` | Canonical source of the two portable skills |
+| `.claude/skills/`, `.claude/hooks/`, `.claude/settings.json` | Installed skills and the SessionStart context hook |
+| `guides/` | Long-form companions to the skills |
+| `tests/` | Zero-dependency checks run by `npm test` and CI |
+| `features.md`, `newFeatures.md`, `current-checklist/` | Capability inventory, idea intake, working-period checklist (not a scope gate) |
+| `audits/`, `human-qa/` | Automated and human QA records, each with `archives/` |
 
 ---
 
-## Final Principle  
-**Status: Usually keep**
+## 9. Gotchas
 
-Leave the repository better than you found it: aligned with project identity, safe to run, honest about uncertainty, documented where needed, consistent with the current architecture, and compatible with the current version direction.
+- Newest `CHANGELOG.md` entries go at the **top**, directly under the `# CHANGELOG` heading. Never edit or delete older entries.
+- CI fails a pull request that changes files without adding a `CHANGELOG.md` entry.
+- `npm test` fails if `skills/` and `.claude/skills/` differ, if a skill and its guide stop referencing the same governance paths, if a numbered section is duplicated, or if this file exceeds 200 lines.
+- `development-docs/design.json` is a placeholder until a design-contract app generates it. Do not invent styling rules.
+- Historical changelog entries cite old section numbers and old paths. They are project memory; leave them.
+
+---
+
+## 10. Done
+
+A task is done when the Definition of Done in `development-docs/developmentManifesto.md` is satisfied. That is the only completion checklist.
+
+Report honestly: what changed, what was validated and how, what was not completed, and any decision record or proposal created.

@@ -1,76 +1,70 @@
 # Spec-Driven-Docs
 
-A repository and explanation of a spec-driven development system for AI-assisted and human-led software projects.
+A documentation-first governance system for AI-assisted and human-led software projects.
 
-## Setup
+Its aim: every agent and human who works in a repository gets the same context and the same procedures, and any deviation from the project's rules is an active, recorded decision rather than a quiet workaround.
 
-This repository is documentation-first and has no required build tooling.
+## What is in this repository
 
-1. Clone the repo.
-2. Open the root docs and read in this order:
-   - `AGENTS.md`
-   - `development-docs/coreIdentity.md`
-   - `development-docs/design.json` for UI/styling work when it contains a generated contract
-   - `development-docs/developmentManifesto.md`
-   - `development-docs/architecture.md`
-   - relevant plans in `development-docs/architecture-plans/` for structural decisions
-   - `development-docs/productRoadmap.md`
+| Path | What it is |
+|---|---|
+| `templates/` | The template set. Copy its contents into your repository root. |
+| `skills/` | Two portable agent skills: `spec-driven-development` and `spec-driven-docs-setup`. |
+| `guides/` | `human-guide.md` for maintainers, `ai-guide.md` for agents. |
+| `development-docs/`, `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` | This repository's own filled-in governance, which doubles as a working example. |
+| `.claude/` | Installed skills and the Claude Code SessionStart hook. |
+| `tests/`, `.github/workflows/docs-checks.yml` | Checks that keep the system consistent. |
 
-## Usage
+## How the system works
 
-Use this repo as a baseline template for spec-driven development governance:
+- **Four governance documents**, each owning one question: `coreIdentity.md` (what the project is and must never become), `developmentManifesto.md` (how it is built and the single Definition of Done), `architecture.md` (what exists now), `productRoadmap.md` (direction and rejected items).
+- **Stable rule IDs.** Hard Constraints are `HC-n`; Architectural Invariants are `INV-n`. Records, changelog entries, and tests cite them.
+- **Decision records** (`development-docs/decisions/D-NNNN-*.md`). When a request conflicts with a rule, the agent stops and asks. If the maintainer approves the deviation, it is written down before implementation, with scope and a review date.
+- **Proposals** (`development-docs/architecture-plans/P-NNNN-*.md`). Before a structural change or new capability, the agent drafts a one-page proposal and waits for approval. It is archived when implemented.
+- **A short `AGENTS.md`** holding the gates: instruction hierarchy, what to read per task, when to stop and ask, commands, paths, gotchas. Procedures live in the development skill. Each rule is stated in one place.
+- **Enforcement.** A Claude Code SessionStart hook prints the active decisions, open proposals, and last handover into every session. CI fails a pull request that adds no `CHANGELOG.md` entry or breaks a tested invariant.
+- **Operational records.** `features.md` (capabilities believed to exist, tested or not), `newFeatures.md` (idea intake), `current-checklist/` (working-period checklist, not a scope gate), `audits/` and `human-qa/` (QA records), `development-docs/research/` (active research), `development-docs/design.json` (placeholder for a generated styling contract). These are intentionally freeform.
 
-- Start from `development-docs/coreIdentity.md` to define project identity.
-- Use `development-docs/developmentManifesto.md` to define quality, safety, and Definition of Done.
-- Use `development-docs/architecture.md` as architecture source-of-truth.
-- Use `development-docs/productRoadmap.md` for version-level direction.
-- Use `development-docs/design.json` as the generated styling contract when it is populated; leave the placeholder untouched.
-- Use `development-docs/architecture-plans/` for feature-specific structural plans, and ask before creating a new plan.
-- Use `CHANGELOG.md` for append-only change history and handoff notes.
+## Using it in your repository
 
-### Operational records
+With an agent: install the skills (see `skills/README.md`) and run the `spec-driven-docs-setup` skill. It fills the documents from evidence in your repo and asks you only what evidence cannot answer.
 
-- `features.md` is a small, granular checklist of capabilities believed to be implemented, whether tested or not. Agents update it automatically when feature coverage changes.
-- `newFeatures.md` is historical intake for ideas that may later be promoted into the roadmap or current checklist. Promoted entries remain in the file.
-- `current-checklist/currentChecklist.md` organizes the current sprint or working period. It is not a scope gate.
-- `audits/` holds automated audit reports and `human-qa/` holds human-run QA reports. Fully processed reports may move into their matching `archives/` folders.
-- `development-docs/research/` holds active curated research and is not automatically archived.
-- `development-docs/architecture-plans/archives/` holds plans after the feature is fully implemented and tested.
+By hand:
 
-These operational records are intentionally freeform and may use different formats.
+```bash
+cp -rn /path/to/Spec-Driven-Docs/templates/. .
+```
 
-### Guides
+```bash
+chmod +x .claude/hooks/session-start.sh
+```
 
-- `guides/human-guide.md` — how maintainers set up and customize the docs.
-- `guides/ai-guide.md` — how AI agents should read and use the docs.
+```bash
+mkdir -p .claude/skills && cp -r /path/to/Spec-Driven-Docs/skills/. .claude/skills/
+```
 
-### Skills for AI agents
+Then follow `guides/human-guide.md`.
 
-The `skills/` directory contains two portable skills (Agent Skills `SKILL.md` format, usable by Claude Code and adaptable to any LLM tool):
+## Working in this repository
 
-- `skills/spec-driven-development/` — for doing development work in a repo that uses these docs (what to read per task, hierarchy, workflow, Definition of Done).
-- `skills/spec-driven-docs-setup/` — for creating customized, complete versions of the docs for a repo from evidence in the repo, including which questions to ask the maintainer.
+```bash
+npm test
+```
 
-See `skills/README.md` for installation instructions per tool.
+No install is needed. To run the same checks as CI, including the changelog-entry requirement:
 
-## Configuration
+```bash
+BASE_REF=origin/main npm test
+```
 
-There is no runtime configuration. Configuration in this repository is policy-based and document-based:
+Start with `AGENTS.md`. In short:
 
-- **Instruction precedence:** Defined in `AGENTS.md` Section 1.
-- **Canonical Definition of Done:** `development-docs/developmentManifesto.md` Section 7.
-- **Update ownership rules:** Each target doc owns its own "when to update" section.
-- **Agent identity format:** `CHANGELOG.md` entries should use `Agent: <Tool Name> (<Model Name>)`.
-- **Version source:** `package.json` is authoritative. Before opening a pull request, agents ask whether to make a patch, minor, or major version bump.
+1. Load the `spec-driven-development` skill.
+2. Make the smallest safe change; stop and ask if it conflicts with an `HC-n` or `INV-n`.
+3. Keep skills, guides, installed copies, and templates in step (`AGENTS.md`, Repo Rules).
+4. Add a `CHANGELOG.md` entry at the top.
 
-## Contributing
-
-When making meaningful changes:
-
-1. Follow instruction hierarchy in `AGENTS.md`.
-2. Make the smallest safe change.
-3. Validate changes where possible.
-4. Append a `CHANGELOG.md` entry with completed, incomplete, and handover notes.
+`package.json` is the authoritative version. Agents ask the maintainer about a version bump before opening a pull request.
 
 ---
 

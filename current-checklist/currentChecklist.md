@@ -4,4 +4,4 @@ This is the organizational checklist for the current sprint or working period. I
 
 Use small, concrete checklist items. Move completed checklists into `current-checklist/archives/` when a new working period begins if the team wants to preserve sprint history.
 
-- [ ] [Current working item]
+<!-- No working-period items recorded. Maintainer to fill in. -->

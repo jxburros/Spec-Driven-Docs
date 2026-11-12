@@ -1,6 +1,43 @@
 # CHANGELOG
 
 
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
+Implemented the eight changes from the system review, at the maintainer's request. The goal of all eight: every rule is either followed or overridden by a recorded decision, and what can be checked mechanically is checked.
+
+1. **Decision log.** Added `development-docs/decisions/` with `TEMPLATE.md` and `archives/`. An approved deviation from a rule is written as `D-NNNN-title.md` before implementation, naming the rule, scope, approving maintainer, and review date.
+2. **Rule IDs.** Hard Constraints are now `HC-n` (`coreIdentity.md`) and Architectural Invariants `INV-n` (`architecture.md`), in both the templates and this repo's live docs.
+3. **CI and tests.** Added `.github/workflows/docs-checks.yml` (runs `npm test` on every pull request). Extended the suite to check: template set complete, live docs free of placeholders (INV-1), installed copies identical to source (INV-2), skill/guide path parity (INV-3), no dependencies (INV-4), `AGENTS.md` ≤ 200 lines (INV-5), numbered sections unique and ascending (INV-6), decision-record and proposal format (INV-7), and a new changelog entry relative to a base ref (INV-8, `tests/changelog-entry.test.mjs`).
+4. **Session hook and installed skills.** Added `.claude/settings.json` and `.claude/hooks/session-start.sh` (read-only; prints the skill reminder, active decision records, open proposals, and the latest changelog handover). Installed both skills in `.claude/skills/`, so `/spec-driven-development` now exists in this repo.
+5. **Short `AGENTS.md`.** Cut from 436 to about 150 lines: hierarchy, read-before table, stop-and-ask gates, repo rules, commands, paths, gotchas. Procedures moved to the `spec-driven-development` skill; generic safety, AI-behavior, and code-style advice was removed because the manifesto owns those topics. The hierarchy and read-before table are no longer restated in the skill or the AI guide.
+6. **Manifesto contradictions.** The template manifesto now has one Definition of Done (the appended duplicate "## 7" and "## 8" sections are gone), one changelog format (the `[OpenAI Codex]`-style prefixes are gone), and a generic per-agent section instead of three near-identical ones.
+7. **Templates separated from live governance.** Templates moved to `templates/`, laid out as they should land in a target repo, and now include `AGENTS.md`, overlays, a starter `CHANGELOG.md`, record templates, the session hook, and a shell-only changelog CI check. `development-docs/` now holds real, filled-in governance for this repo.
+8. **Proposals.** `development-docs/architecture-plans/` now holds per-change proposals (`P-NNNN-title.md`, from `TEMPLATE.md`). "Ask before creating a plan" is replaced by "draft the proposal, then wait for approval"; proposals are archived when implemented or rejected.
+
+Also updated both skills, both guides, `README.md`, `skills/README.md`, both overlays, and `features.md` to match.
+
+### Not completed
+- `development-docs/productRoadmap.md` sections "Current Version Focus" and "Planned Future Versions" are left blank with comments: only the maintainer can state direction.
+- `development-docs/coreIdentity.md` has comment-marked gaps for secondary audiences and further anti-goals, for the same reason.
+- No version bump was made and no pull request was opened; the maintainer has not been asked about a bump yet.
+- `docs/index.html` (paused project page) was not reviewed against the new layout.
+
+### Notes
+- Validation: `npm test` passes (12 pass, 1 skipped without `BASE_REF`); `BASE_REF=origin/main npm test` passes after commit. Each new gate was also made to fail on purpose (guide missing a path, drifted installed skill, malformed decision record) and failed as expected. The hook was run by hand and lists an Active record when one exists.
+- Not validated: the two GitHub Actions workflows have not run on GitHub yet; they will first run on the next pull request.
+- The live `HC-1`…`HC-5` restate the five "Non-Negotiable Project Values" from the previous `AGENTS.md`. One wording change needs maintainer confirmation: `HC-3` ("No application runtime") now explicitly permits the zero-dependency test suite, CI workflows, and agent session hooks, because items 3 and 4 add those. The previous wording was "do not add build steps, application infrastructure, or runtime configuration".
+- `INV-3` (skill/guide parity) compares which governance paths each file names. It catches a side that stops mentioning something; it cannot catch two texts that give different advice.
+- No decision records or proposals were created.
+- The folder name `architecture-plans/` was kept for proposals to avoid renaming a path that every document references.
+
+### Handover
+- Next agent should start with: the session-hook output, then `AGENTS.md`.
+- Open questions: confirm the `HC-3` wording; fill the roadmap's current version focus and rejected directions; decide whether `0.0.0` should be bumped for this change; the open product questions in `development-docs/productRoadmap.md`.
+- Risks or assumptions: adopters who copied the old root-level templates have a different layout (old `AGENTS.md` section numbers, no `decisions/`); the guides describe the new layout only. Parallel branches that each add a top changelog entry will conflict on merge.
+
+---
+
 ## 2026-08-11 — Agent: Claude Code (Claude)
 
 ### Changed

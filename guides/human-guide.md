@@ -24,14 +24,17 @@ Every document has a distinct scope. Understanding this prevents duplication and
 | `development-docs/developmentManifesto.md` | How the project *is built* — standards, principles, AI rules, Definition of Done | When standards change or new agent rules are needed |
 | `development-docs/architecture.md` | What the system *looks like* — structure, data flow, integrations | When architecture changes |
 | `development-docs/design.json` | Generated UI styling and design contract | When the design-contract app regenerates it; leave the placeholder untouched |
-| `development-docs/architecture-plans/` | Feature-specific structural plans and archived plans | When a feature needs decisions beyond the current architecture |
+| `development-docs/architecture-plans/` | Change proposals (`P-NNNN`), drafted before structural changes or new capabilities | An agent drafts one, you approve it, it is archived when implemented |
+| `development-docs/decisions/` | Decision records (`D-NNNN`): every deviation you approved from a rule | Whenever you approve a deviation; archive when no longer active |
 | `development-docs/research/` | Curated research for features and processes | Keep active; add research as needed |
 | `development-docs/productRoadmap.md` | Where the project *is going* — versions, features, deferrals | When product direction changes; never for ordinary progress |
 | `features.md` | Granular checklist of capabilities believed to be implemented | Whenever feature coverage changes; testing status is separate |
 | `newFeatures.md` | Historical intake of possible future features | Whenever a new idea is captured; retain promoted entries |
 | `current-checklist/currentChecklist.md` | Organizational checklist for the current sprint or working period | As working priorities change; it is not a scope gate |
 | `audits/` and `human-qa/` | Automated and human QA records, respectively | Add records when tests are performed; archive fully processed reports |
-| `AGENTS.md` | Instructions for *all AI coding agents* | When agent workflow or project summary needs updating |
+| `AGENTS.md` | Gates and repo facts for *all AI coding agents*, kept under 200 lines | When commands, paths, gotchas, or the project summary change |
+| `.claude/settings.json`, `.claude/hooks/session-start.sh` | Claude Code session hook that prints active decisions, open proposals, and the last handover | Rarely |
+| `.github/workflows/spec-docs-checks.yml` | CI check that a pull request adds a `CHANGELOG.md` entry | Rarely |
 | `CLAUDE.md` | Instructions specific to *Claude* | When Claude-specific behavior needs adjusting |
 | `.github/copilot-instructions.md` | Instructions specific to *GitHub Copilot* | When Copilot-specific behavior needs adjusting |
 | `CHANGELOG.md` | Record of *what changed and who did it* | Every meaningful change |
@@ -45,7 +48,16 @@ The documents form a **hierarchy**: identity and values override standards, stan
 
 ### Step 1: Copy the file structure
 
-Copy these files into your new repo:
+Copy the contents of this repo's `templates/` folder into your repo root. The folder mirrors the layout the files should have in your repo:
+
+```bash
+cp -rn <path-to-spec-driven-docs>/templates/. .
+chmod +x .claude/hooks/session-start.sh
+```
+
+`-n` keeps any file you already have. If you already have a `.claude/settings.json`, merge the `SessionStart` hook from the template into it by hand.
+
+That gives you:
 
 ```
 development-docs/
@@ -55,8 +67,8 @@ development-docs/
   productRoadmap.md
   design.json
   research/
-  architecture-plans/
-    archives/
+  decisions/            (TEMPLATE.md, archives/)
+  architecture-plans/   (TEMPLATE.md, archives/)
 current-checklist/
   currentChecklist.md
   archives/
@@ -69,9 +81,13 @@ newFeatures.md
 AGENTS.md
 CLAUDE.md
 .github/copilot-instructions.md
+.github/workflows/spec-docs-checks.yml
+.claude/settings.json
+.claude/hooks/session-start.sh
 CHANGELOG.md
-README.md
 ```
+
+`README.md` is yours; the template set does not include one.
 
 ### Step 2: Fill in coreIdentity.md first
 
@@ -85,6 +101,8 @@ Key questions to answer honestly:
 
 Do not write aspirational identity. Write what is actually true today, or what you are firmly committing to. The "What This Project Is Not" and "Hard Constraints / Never List" sections are especially important — AI agents read these to know when to push back or ask questions.
 
+Give every hard constraint a stable ID (`HC-1`, `HC-2`, …) and word it with MUST / MUST NOT, so that anyone can tell whether a change breaks it. Never renumber or reuse an ID; decision records, changelog entries, and tests cite them.
+
 ### Step 3: Fill in developmentManifesto.md
 
 This document defines your team's development standards and the rules AI agents must follow. The sections that most need customization:
@@ -92,7 +110,7 @@ This document defines your team's development standards and the rules AI agents 
 - **Project-Specific Development Doctrine**: Your domain rules (e.g., "never write raw SQL," "all state must be in the store," "no inline styles")
 - **AI Role in Development**: What agents may and must not do in this specific project
 - **Agent-Specific Instructions**: Different instructions for Claude vs. Copilot vs. Codex if needed
-- **Definition of Done**: What actually counts as finished work on this project
+- **Definition of Done**: What actually counts as finished work on this project, including the real validation commands. Keep exactly one Definition of Done; every other document points to it
 
 The general principles (test your work, don't hide failures, keep changes small) should stay mostly as-is unless your team genuinely works differently.
 
@@ -104,7 +122,7 @@ Describe the current architecture honestly. Sections you should prioritize:
 - **Directory and File Map**: Where things live and why
 - **Major Subsystems**: What the big pieces are and how they relate
 - **Execution Flow**: What happens when the system runs
-- **Architectural Invariants**: Rules that must not be broken without a deliberate conversation
+- **Architectural Invariants**: Rules that must not be broken without a deliberate conversation. Number them `INV-1`, `INV-2`, …. Wherever an invariant can be checked by a test or CI job, add the check and name the ID in it — a checked rule cannot be skipped quietly
 
 Do not fill in sections you don't know yet. Blank or "TBD" is better than invented architecture. Agents treat this file as ground truth — if you write something incorrect here, agents will make decisions based on it.
 
@@ -124,18 +142,22 @@ The roadmap's main value is telling agents "don't implement this yet" and "this 
 - Keep `newFeatures.md` as historical intake even after ideas are promoted to the roadmap or current checklist.
 - Use `current-checklist/currentChecklist.md` as an organizational aid for the current sprint or working period, not as a scope gate.
 - Keep `development-docs/research/` active for curated research.
-- Put feature-specific structural plans in `development-docs/architecture-plans/`; ask before creating a plan, and move fully implemented and tested plans into `archives/`.
+- `development-docs/architecture-plans/` holds change proposals. Agents draft a proposal before a structural change or new capability and wait for your approval; fully implemented and tested proposals move into `archives/`.
+- `development-docs/decisions/` holds decision records. Leave it empty at setup; see "Deviations and decision records" below.
 - Store automated audit reports in `audits/` and human-run QA reports in `human-qa/`; move fully processed reports into their matching archive folders.
 
 ### Step 6: Update AGENTS.md project sections
 
-The template AGENTS.md has placeholder sections for:
-- Project Summary (Section 5)
-- Non-Negotiable Project Values (Section 6)
-- Domain-Specific Rules (Section 15)
-- Custom Repo Instructions (Section 19)
+The template `AGENTS.md` is short on purpose: it is loaded into every agent session, and research on agent instruction files shows that long, generic ones cost context without improving results. Fill in:
 
-Fill in these four sections with your project's specifics. The rest of AGENTS.md is general agent governance that should remain mostly unchanged.
+- Project Summary
+- Repo Rules — only rules that are specific to your repo and not obvious from the code
+- Commands
+- Important Paths
+- Gotchas
+- Any repo-specific rows in the Read Before You Change table
+
+Leave Start Here, Instruction Hierarchy, Stop and Ask, and Done as they are. Do not copy your `HC-n` or `INV-n` lists into `AGENTS.md`, and keep the file under 200 lines.
 
 ### Step 7: Customize the agent-specific files
 
@@ -158,13 +180,15 @@ cp -r <path-to-spec-driven-docs>/skills/spec-driven-development \
 
 If copying from the source repo isn't practical, create `.claude/skills/spec-driven-development/SKILL.md` and `.claude/skills/spec-driven-docs-setup/SKILL.md` and paste in the content from those files verbatim.
 
-Add skill invocation instructions to your `AGENTS.md` Domain-Specific Rules or Custom Repo Instructions section:
+The template `AGENTS.md` ("Start Here") and the overlay templates already tell agents to load the skill from `.claude/skills/`, so no further wiring is needed.
 
-```markdown
-When working in this repository, invoke the `spec-driven-development` skill before reading the development documents. When asked to set up or update the Spec-Driven Docs, invoke the `spec-driven-docs-setup` skill.
+For Claude Code, the session hook copied in Step 1 runs at every session start. Check it once:
+
+```bash
+sh .claude/hooks/session-start.sh
 ```
 
-For each agent tool the team uses, add the tool-specific invocation method in that tool's instruction file (e.g., `/spec-driven-development` in `CLAUDE.md` for Claude Code, or a path reference in `.github/copilot-instructions.md` for GitHub Copilot).
+It should print the skill reminder, active decision records, open proposals, and the latest changelog handover. It only reads files.
 
 ### Step 9: Update README.md
 
@@ -177,7 +201,7 @@ Replace the template README with a genuine project README. It should cover:
 
 ### Step 10: Initialize CHANGELOG.md
 
-Add an initial entry recording who set up the project and what was filled in.
+Add an initial entry recording who set up the project and what was filled in. New entries go at the top of the file. If you use GitHub Actions, `.github/workflows/spec-docs-checks.yml` fails any pull request that does not add an entry; delete the workflow if you do not want that gate.
 
 ---
 
@@ -221,7 +245,9 @@ cp -r <path-to-spec-driven-docs>/skills/spec-driven-development \
       .claude/skills/
 ```
 
-Add skill invocation instructions to `AGENTS.md` (see Step 8 above for the exact text). This ensures future agents working in the repo use the skills immediately rather than relying only on the governance documents.
+Then confirm the session hook runs (see Step 8 above). This ensures future agents working in the repo load the skills immediately rather than relying only on the governance documents.
+
+When adopting mid-project, existing code may already break a constraint you have just written down. Do not leave that implicit: for each case, either fix the code or approve a decision record in `development-docs/decisions/`.
 
 ### What to do when you can't fill everything in
 
@@ -233,6 +259,26 @@ Leave the section with a comment explaining what's unknown or why it's blank. Fo
 ```
 
 Agents will skip a blank section rather than invent content. A comment clarifies the blank is intentional.
+
+---
+
+## Deviations and decision records
+
+The point of the system is that every rule is either followed or deliberately overridden — never quietly worked around.
+
+When a request conflicts with a Hard Constraint (`HC-n`), an Architectural Invariant (`INV-n`), a Rejected roadmap item, a manifesto rule, or an approved proposal, the agent stops and tells you which rule is in the way and what the compliant alternatives are. You then choose:
+
+- **Decline** — the agent does the compliant alternative or leaves the task undone.
+- **Approve the deviation** — the agent writes a decision record from `development-docs/decisions/TEMPLATE.md` (`D-NNNN-short-title.md`) *before* implementing. It names the rule, the reason, the exact scope, you as approver, and a review date.
+- **Change the rule** — if the rule is simply wrong now, edit the governing document instead.
+
+Only you approve a record; an agent cannot approve its own deviation. Active records are shown to Claude Code at every session start, so exceptions stay visible. When a record expires or is superseded, it moves to `development-docs/decisions/archives/`.
+
+Review the active records at each release. A long list of active deviations from one rule means the rule should change.
+
+## Proposals
+
+For a structural change or a new capability, the agent drafts a one-page proposal from `development-docs/architecture-plans/TEMPLATE.md` (`P-NNNN-short-title.md`) and waits. It does not ask whether to write one. You approve, edit, or reject it; the agent implements only an Approved proposal, then applies the document updates the proposal lists and archives it. Rejected proposals are archived too, so the next agent can see what was already considered.
 
 ---
 
@@ -253,7 +299,7 @@ Agents will skip a blank section rather than invent content. A comment clarifies
 | Data, Privacy, and Ownership | Required if handling user data | Skip if the project has no user data |
 | What This Project Is | Required | Keep short — three to five bullet points |
 | What This Project Is Not | Required | This section prevents the most AI mistakes |
-| Hard Constraints / Never List | Required | These are read as non-negotiable rules |
+| Hard Constraints / Never List | Required | These are read as non-negotiable rules; number them `HC-n` |
 | Domain Model / Core Concepts | Recommended | Prevents agents from using the wrong terminology |
 | Success Criteria | Recommended | Helps agents flag when something looks wrong |
 | Decision Filter | Optional | Useful for teams that need to say "no" frequently |
@@ -277,8 +323,8 @@ Agents will skip a blank section rather than invent content. A comment clarifies
 | Dependency Philosophy | Optional | Most useful for strict dependency policies |
 | Error Handling | Recommended | Especially important for user-facing systems |
 | Agent Operating Rules | Required | The fourteen rules should stay mostly unchanged |
-| Agent-Specific Instructions | Customize | Different rules for each agent if needed |
-| Definition of Done | Required | Must match your actual team standards |
+| Agent-Specific Instructions | Optional | Only if agents need different rules; overlays are the preferred home |
+| Definition of Done | Required | Must match your actual team standards; the only one in the system |
 | Final Principle | Keep | Don't delete |
 
 ### architecture.md
@@ -313,6 +359,8 @@ Future version planning can be minimal until you know what's actually next.
 **The "Never List" is the highest-value thing you can write.** The more specific the constraints, the better agents behave. "Never call the external API without rate-limiting" is more useful than "be careful with external APIs."
 
 **Update docs when behavior changes, not when ideas change.** If you're still deciding whether to do something, don't put it in architecture.md. Put it in productRoadmap.md under "Open Product Questions."
+
+**Enforce what you can.** Instructions are advisory; an agent can skip them. A CI check or a hook cannot be skipped. Whenever a rule can be verified mechanically, verify it, and keep prose for the judgment calls.
 
 **Review the docs when something goes wrong.** If an AI agent did something you didn't want, the first question is: "Is there a document that should have prevented this?" Usually the answer is yes, and the fix is updating that document.
 
@@ -351,6 +399,7 @@ Treat `package.json` as the authoritative version source. Before an agent opens 
 - Update productRoadmap.md status labels
 - Move released features to "Current Product State"
 - Review coreIdentity.md for drift
+- Review the active records in `development-docs/decisions/`: expire, renew, or turn each into a rule change
 
 **When something breaks unexpectedly:**
 - Check whether the failure mode should be documented in architecture.md

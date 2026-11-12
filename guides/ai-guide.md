@@ -11,16 +11,20 @@ This repo ships two portable skills that encode the most important guidance in t
 **Before reading these documents**, invoke the development skill:
 
 - **Claude Code:** run `/spec-driven-development` at the start of your session.
-- **Other agents:** read `skills/spec-driven-development/SKILL.md` before consulting the governance documents.
+- **Other agents:** read the skill file before consulting the governance documents — `.claude/skills/spec-driven-development/SKILL.md` in an adopting repository, `skills/spec-driven-development/SKILL.md` in the Spec-Driven-Docs repository itself.
 
 When asked to **set up Spec-Driven Docs in another repository**, use the setup skill:
 
 - **Claude Code:** run `/spec-driven-docs-setup`.
-- **Other agents:** read `skills/spec-driven-docs-setup/SKILL.md`.
+- **Other agents:** read `skills/spec-driven-docs-setup/SKILL.md` (or the copy in `.claude/skills/`).
 
 The setup skill includes a step to install both skills in the target repo — complete that step so future agents in that repo can also invoke them directly.
 
 See `skills/README.md` for installation instructions per tool.
+
+**How this guide relates to the skill.** The skill owns the procedures and `AGENTS.md` owns the gates (instruction hierarchy, read-before table, stop-and-ask list). This guide explains the reasoning behind them and does not restate them; where it summarizes, the skill and `AGENTS.md` are authoritative.
+
+In Claude Code, a SessionStart hook (`.claude/hooks/session-start.sh`, registered in `.claude/settings.json`) prints the skill reminder, the active decision records, the open proposals, and the latest `CHANGELOG.md` handover at the start of every session. Other agents read those three things themselves.
 
 ---
 
@@ -30,46 +34,26 @@ This documentation system exists because AI agents fill gaps in their knowledge 
 
 When documents are absent, sparse, or unclear, the correct response is to proceed carefully with the available context and flag the uncertainty — not to invent a plausible answer.
 
+The second principle: **every rule is either followed or overridden by a recorded, maintainer-approved decision.** Working around a rule quietly — even when the result works — is the failure this system exists to prevent.
+
 ---
 
 ## Instruction Hierarchy
 
-When instructions conflict, follow this precedence order (highest to lowest):
+The precedence order is defined once, in the Instruction Hierarchy section of `AGENTS.md`. Read it there. In outline: the user's explicit request comes first, then identity (`coreIdentity.md`), the generated `development-docs/design.json` for UI work, standards (`developmentManifesto.md`), structure (`architecture.md`), approved proposals in `development-docs/architecture-plans/`, direction (`productRoadmap.md`), `AGENTS.md`, your tool overlay, and finally existing code.
 
-1. **User's explicit request** in the current session
-2. `development-docs/coreIdentity.md` — Project identity and non-negotiable constraints
-3. `development-docs/design.json` — Generated styling contract for UI work; ignore the placeholder
-4. `development-docs/developmentManifesto.md` — Development standards, AI operating rules, Definition of Done
-5. `development-docs/architecture.md` — System structure and architectural invariants
-6. Relevant `development-docs/architecture-plans/` plans — Feature-specific structural guidance
-7. `development-docs/productRoadmap.md` — Version scope and product direction
-8. `AGENTS.md` — General agent instructions and workflow
-9. Tool-specific files (`CLAUDE.md`, `.github/copilot-instructions.md`) — Your agent's specific instructions
-10. Existing code — Actual implemented behavior
+**What this means in practice:**
 
-**What this means in practice:** If a user asks you to do something that conflicts with a coreIdentity.md constraint, follow the constraint and explain the conflict. If AGENTS.md says one thing and the code does another, follow AGENTS.md and note the discrepancy. Never silently violate a higher-priority document to satisfy a lower-priority one.
+- The user's request ranks first, but that does not make a conflicting request automatic. If it conflicts with a Hard Constraint, an Architectural Invariant, or a Rejected roadmap item, stop, name the rule by ID, and ask. The user may then choose the deviation knowingly, and you record it (see "Deviations and Decision Records").
+- An Active record in `development-docs/decisions/` overrides the one rule it names, within its stated scope, and nothing else.
+- If `AGENTS.md` says one thing and the code does another, follow `AGENTS.md` and note the discrepancy.
+- Never silently violate a higher-priority document to satisfy a lower-priority one.
 
 ---
 
 ## Document Reference Map
 
-Use this table to know which documents to read before starting a task.
-
-| Task Type | Documents to Read |
-|-----------|-------------------|
-| Any meaningful change | AGENTS.md Section 1 (hierarchy), coreIdentity.md |
-| Changing code behavior | + developmentManifesto.md (principles, Definition of Done) |
-| Changing structure, modules, data flow, integrations | + architecture.md |
-| UI or styling work | + generated `development-docs/design.json` |
-| Structural decision needing feature-specific guidance | Check `development-docs/architecture-plans/`; ask before creating a missing plan |
-| Implementing a new feature | + productRoadmap.md (is this in scope for current version?) |
-| Updating feature coverage | Update `features.md` automatically; it is an inventory, not proof of testing |
-| Reviewing QA or audit evidence | Use the relevant `audits/` or `human-qa/` file; archive it after fully processing it |
-| Using curated research | Read relevant material in `development-docs/research/`; research remains active |
-| Organizing current work | `current-checklist/currentChecklist.md`; it is not a scope gate |
-| Changing AI agent behavior or safety rules | + developmentManifesto.md Section 14 (Agent Operating Rules) |
-| Updating documentation | Check architecture.md Section 21 (When to Update) |
-| Anything touching secrets, data, or destructive operations | developmentManifesto.md Section 8 (Safety) |
+The table of what to read for each task type lives in `AGENTS.md` ("Read Before You Change"), because it is repo-specific. Every repository's table covers at least: `coreIdentity.md` for any meaningful change, `developmentManifesto.md` for behavior and process changes, `architecture.md` for structural changes, `development-docs/architecture-plans/` for structural decisions and new capabilities, `productRoadmap.md` for new features, and `development-docs/design.json` for UI work once generated.
 
 Do not read every document for every task. Read the relevant documents and proceed. Over-reading documents on small tasks wastes context and doesn't improve outcomes.
 
@@ -85,7 +69,7 @@ Do not read every document for every task. Read the relevant documents and proce
 
 **The most important sections:**
 - **What This Project Is Not** — Hard negatives. If the request would make the project do one of these things, push back before implementing.
-- **Hard Constraints / Never List** — Non-negotiable rules. Treat these as absolute. Do not interpret them loosely. Do not implement workarounds that technically comply but violate the spirit.
+- **Hard Constraints / Never List** — Non-negotiable rules, each with a stable ID (`HC-1`, `HC-2`, …). Do not interpret them loosely. Do not implement workarounds that technically comply but violate the spirit. Cite the ID when you flag a conflict.
 - **Decision Filter for Future Changes** — Seven questions to apply when evaluating a change. Use this when a user request is ambiguous.
 - **Target Users and Use Cases** — Who the system serves. Use this to judge whether a feature fits the user model.
 
@@ -103,14 +87,14 @@ Do not read every document for every task. Read the relevant documents and proce
 
 **The most important sections:**
 - **Agent Operating Rules** (Section 14) — Fourteen rules that apply to all agents. These are non-negotiable. They include things like: do not claim validation was done when it wasn't; do not make destructive changes by default; record incomplete work honestly.
-- **Agent-Specific Instructions** (Section 15) — Rules specific to your agent. Check whether there's a subsection for you (Claude, Copilot, Codex, etc.).
-- **Definition of Done** (Section 16) — What counts as finished work. A task is not complete unless all items here are satisfied.
+- **Agent-Specific Instructions** (Section 15) — Rules specific to your agent, when the repo has any.
+- **Definition of Done** (Section 16) — What counts as finished work. This is the only completion checklist in the system; a task is not complete unless all applicable items are satisfied.
 - **Project-Specific Development Doctrine** (Section 4) — Domain rules for this project specifically. These often contain the most actionable guidance.
 - **Safety, Privacy, and Non-Destructive Behavior** (Section 8) — What you must never do by default, regardless of how the task is framed.
 
 **How to interpret it:** Principles here are applied contextually, not mechanically. "Keep changes small" means don't expand scope without reason, not that you can't make a large change when a large change is what's needed.
 
-**What not to do:** Do not skip Section 16 (Definition of Done) before reporting work as complete. Do not treat agent operating rules as suggestions.
+**What not to do:** Do not skip the Definition of Done before reporting work as complete. (Section numbers here are the template's; a customized manifesto may number them differently.) Do not treat agent operating rules as suggestions.
 
 ---
 
@@ -121,7 +105,7 @@ Do not read every document for every task. Read the relevant documents and proce
 **Read it when:** Making any structural change, adding integrations, changing data flow, adding modules or significant files, or evaluating where something belongs.
 
 **The most important sections:**
-- **Architectural Invariants** — Rules that must not be broken without an explicit conversation. If your implementation would break one of these, stop and ask.
+- **Architectural Invariants** — Rules that must not be broken without an explicit conversation, each with a stable ID (`INV-1`, `INV-2`, …). If your implementation would break one of these, stop, name the ID, and ask.
 - **Directory and File Map** — Where things live. Use this to decide where new code belongs.
 - **Major Subsystems** — What the big pieces are and what they're responsible for. Use this to understand dependencies before making changes.
 - **System Boundaries** — What this repo owns vs. what's external. Do not move responsibilities across this boundary without deliberate reason.
@@ -159,8 +143,9 @@ Do not read every document for every task. Read the relevant documents and proce
 - `newFeatures.md` is historical intake. Keep entries after promoting them to the roadmap or current checklist.
 - `current-checklist/currentChecklist.md` is a lightweight organizational tool for the current sprint or working period. It does not define scope.
 - `audits/` contains automated audits and `human-qa/` contains human-run tests. Once a report has been fully processed, it may move into its matching `archives/` folder.
-- `development-docs/architecture-plans/` contains feature-specific plans. Ask before creating a new plan; archive a completed and tested plan when its guidance is no longer active.
-- `development-docs/research/` contains active curated research and is not automatically archived.
+- `development-docs/architecture-plans/` contains change proposals (`P-NNNN-title.md`). Draft one before a structural change or new capability that no proposal covers, then wait for approval; archive it once implemented and tested.
+- `development-docs/decisions/` contains decision records (`D-NNNN-title.md`): every maintainer-approved deviation from a rule. Active records are in force; inactive ones live in `archives/`.
+- `development-docs/research/` contains active curated research and is not automatically archived. Ask before adding research documents.
 - `development-docs/design.json` is a placeholder until the design-contract app generates it. Do not invent styling rules in it.
 
 ### `AGENTS.md`
@@ -170,20 +155,21 @@ Do not read every document for every task. Read the relevant documents and proce
 **Read it when:** Starting work in a new session, when you're uncertain about workflow, or when interpreting cross-cutting concerns.
 
 **The most important sections:**
-- **Instruction Hierarchy** (Section 1) — The full precedence order. Read this first if you haven't already.
-- **Required Change Workflow** (Section 7) — The seven-step process to follow when making changes.
-- **Project Summary** (Section 5) — This project's specific description. Read to orient yourself.
-- **Non-Negotiable Project Values** (Section 6) — Values that override feature requests.
-- **Completion Checklist** (Section 17) — Verify these before reporting work as done.
-- **Domain-Specific Rules** (Section 15) — Project-specific rules not covered in other documents.
+- **Start Here** — how to load the skill and what to read at session start.
+- **Instruction Hierarchy** — the full precedence order.
+- **Read Before You Change** — which documents each task type requires.
+- **Stop and Ask** — the conditions under which you must not proceed without the maintainer.
+- **Repo Rules, Commands, Important Paths, Gotchas** — the repo-specific facts you cannot infer from the code.
 
-**What not to do:** Do not skip the completion checklist. Do not assume the project summary is accurate if it still contains template placeholders — flag it.
+`AGENTS.md` is deliberately short (under 200 lines) because it is loaded into every session. It holds gates and facts, not procedures and not generic advice.
+
+**What not to do:** Do not assume the project summary is accurate if it still contains template placeholders — flag it. Do not add rules to `AGENTS.md` that already live in another document.
 
 ---
 
 ### Tool-Specific Files (`CLAUDE.md`, `.github/copilot-instructions.md`)
 
-**What they are:** Overlay instructions for a specific agent. These add to AGENTS.md but do not replace it.
+**What they are:** Overlay instructions for a specific agent (`CLAUDE.md`, `.github/copilot-instructions.md`). These add to AGENTS.md but do not replace it.
 
 **Read them when:** You are the agent they address. If you are Claude, read `CLAUDE.md`. If you are Copilot, read `.github/copilot-instructions.md`.
 
@@ -198,35 +184,62 @@ Do not read every document for every task. Read the relevant documents and proce
 
 ## The Change Workflow
 
+The authoritative procedure is the "Change workflow" section of the skill. In outline:
+
 Before making a change:
-1. Identify which documents govern the request (use the reference map above)
-2. Read the relevant sections — not the full documents unless needed
-3. Identify the smallest safe change that satisfies the request
-4. Check whether the change would violate any invariants, constraints, or "never" rules
-5. If the request conflicts with a document, state the conflict before implementing
+1. Identify which documents govern the request and read the relevant sections
+2. Check the request against every Hard Constraint, Architectural Invariant, the roadmap's Rejected list, the manifesto, and approved proposals
+3. If it conflicts, stop and follow "Deviations and Decision Records" below
+4. If it is a structural change or new capability with no covering proposal, follow "Proposals" below
+5. Otherwise identify the smallest safe change that satisfies the request
 
 During implementation:
 - Preserve existing behavior unless the request explicitly changes it
-- Prefer clear, maintainable code over clever solutions
 - Follow existing conventions in the codebase
 - Do not add features beyond what was requested
-- Document uncertainty — do not hide it
+- If you discover mid-task that the work breaks a rule, stop then — not after finishing
 
 After implementation:
-- Verify against the Definition of Done (developmentManifesto.md Section 16)
-- Run available validation (tests, lint, type checks, build)
-- Update CHANGELOG.md (required)
-- Update README.md if user-facing behavior, setup, or features changed
-- Update architecture.md if architecture changed
-- Verify the completion checklist in AGENTS.md Section 17
-- Update `features.md` when feature coverage changed.
-- Before opening a pull request, ask whether `package.json` should receive a patch, minor, or major version bump. Do not open the PR until the decision is clear.
+- Run available validation (tests, lint, type checks, build) and report it honestly
+- Update `README.md`, `architecture.md`, `productRoadmap.md`, and `features.md` only when their own update conditions are met
+- Verify the Definition of Done in `developmentManifesto.md`
+- Add a `CHANGELOG.md` entry (required)
+- Before opening a pull request, ask whether the authoritative version (commonly `package.json`) should receive a patch, minor, or major bump. Do not open the PR until the decision is clear.
+
+---
+
+## Deviations and Decision Records
+
+A deviation is any change that breaks an `HC-n`, breaks an `INV-n`, implements a Rejected roadmap item, contradicts a manifesto rule, or departs from an approved proposal.
+
+Why records exist: without them, a deviation is noted once in a changelog entry and then forgotten, and the next agent either "fixes" it or copies it somewhere it was never approved. A record keeps the exception visible, bounded, and attributable.
+
+1. **Stop before implementing.** Tell the maintainer which rule (by ID) conflicts, why, and what the compliant alternatives are.
+2. **Wait for an explicit answer.** A request that happens to conflict is not approval.
+3. **If approved, write the record first**, from `development-docs/decisions/TEMPLATE.md`, as `D-NNNN-short-title.md`. "Approved by" names the maintainer, never an agent.
+4. **Implement within the stated scope only.**
+5. **Cite the record ID** in the changelog entry and completion report.
+
+Never rewrite an approved record; supersede it. When a record stops being Active, move it to `development-docs/decisions/archives/`. If a review date has passed, tell the maintainer rather than extending it.
+
+---
+
+## Proposals
+
+Before a structural change or new capability that no existing proposal covers, draft a proposal from `development-docs/architecture-plans/TEMPLATE.md` as `P-NNNN-short-title.md`.
+
+- **Draft it; do not ask whether to draft it.** A one-page draft gives the maintainer something concrete to approve, change, or reject, which is faster than a question.
+- Write it as a delta against the current documents, with a recommendation for each open choice.
+- Implement only when its status is Approved.
+- On completion, apply the document changes it lists, mark it Implemented, and move it to `development-docs/architecture-plans/archives/`. Rejected proposals are archived too, as a record of what was considered.
+
+Small, obvious changes inside existing structure do not need a proposal.
 
 ---
 
 ## Updating CHANGELOG.md
 
-Every meaningful change requires a CHANGELOG.md entry. Append to the file; do not replace or reorder existing entries.
+Every meaningful change requires a CHANGELOG.md entry. Add it where the file's existing entries show new ones go (in a newest-first file, at the top); do not replace or reorder existing entries. In repositories that ship the CI check, a pull request without a new entry fails.
 
 Use your agent's standardized name from your tool-specific file. For Claude: `Agent: Claude Code (Claude)`.
 
@@ -244,7 +257,7 @@ Required format:
 
 ### Notes
 - [Validation run or not run, and why]
-- [Assumptions made]
+- [Decision records or proposals created, by ID; assumptions made]
 - [Anything the next agent or maintainer should know]
 
 ### Handover
@@ -290,15 +303,14 @@ Do not silently update docs to match what you observe in code unless updating do
 
 ## When to Ask Instead of Proceed
 
-Ask the user before proceeding when:
-- The request would violate a Hard Constraint or "Never" rule in coreIdentity.md
+The authoritative list is the "Stop and Ask" section of `AGENTS.md`. It always includes:
+- The request would violate a Hard Constraint (`HC-n`) in coreIdentity.md
 - The request would implement something listed as "Rejected / Out-of-Scope" in productRoadmap.md
-- The request would break an Architectural Invariant in architecture.md
+- The request would break an Architectural Invariant (`INV-n`) in architecture.md
 - The task is ambiguous between two approaches that have different architectural implications
-- A feature needs a new architecture plan or new curated research before implementation
 - You're about to make a destructive or hard-to-reverse change that wasn't explicitly requested
 
-State what you found and why you're asking. Don't just refuse — explain the conflict so the user can decide whether to override it.
+State what you found and why you're asking. Don't just refuse — explain the conflict so the user can decide whether to override it. If they do, the override becomes a decision record.
 
 ---
 
@@ -327,3 +339,5 @@ State what you found and why you're asking. Don't just refuse — explain the co
 - Adding speculative future architecture to architecture.md
 - Claiming work is complete when it isn't
 - Silently working around a constraint instead of flagging the conflict
+- Implementing an approved deviation without writing the decision record first
+- Asking "should I write a plan?" instead of drafting the proposal
