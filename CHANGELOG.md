@@ -1,6 +1,26 @@
 # CHANGELOG
 
 
+## 2026-11-13 — Agent: Claude Code (Claude)
+
+### Changed
+- Bumped the version from `0.0.0` to `0.1.0` in `package.json` and `package-lock.json`. The maintainer chose a minor bump for pull request #31 (decision log, rule IDs, proposals, CI checks, session hook, templates split from live governance, adopter-first README, P-0001).
+- `development-docs/productRoadmap.md`: current version updated; the open question about a first versioned release now asks only what `1.0.0` should contain.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: `npm test` passes locally with `BASE_REF=origin/main`.
+- No git tag was created; tagging was not requested.
+
+### Handover
+- Next agent should start with: `AGENTS.md`.
+- Open questions: the `HC-3` wording; the open questions in `development-docs/productRoadmap.md`.
+- Risks or assumptions: none.
+
+---
+
 ## 2026-11-12 — Agent: Claude Code (Claude)
 
 ### Changed

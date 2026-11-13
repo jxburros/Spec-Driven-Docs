@@ -10,7 +10,7 @@
 
 ## 1. Current Product State
 
-- **Version:** `0.0.0` (`package.json`). No release has been tagged.
+- **Version:** `0.1.0` (`package.json`). No release has been tagged.
 - **What it provides:** see "What you get" in `README.md`.
 - **Constraints:** `HC-1`…`HC-5` in `development-docs/coreIdentity.md`.
 
@@ -36,7 +36,7 @@ These are undecided. Agents must not resolve them by implementing an answer.
 - **Project page.** `docs/index.html` exists and the GitHub Pages deployment workflow is disabled (`.github/workflows/pages.yml.disabled`). Whether and when to re-enable it is undecided.
 - **Enforcement for non-Claude agents.** Only Claude Code has a session hook. Whether to ship equivalents for other tools is undecided.
 - **Changelog structure.** A single file conflicts across parallel branches. Whether to move to per-change fragments is undecided.
-- **First versioned release.** What `0.1.0` or `1.0.0` should contain is undecided.
+- **Stable release.** What `1.0.0` should contain is undecided.
 
 ---
 
