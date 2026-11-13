@@ -2,23 +2,23 @@
 
 > **Claude-specific overlay**
 >
-> Claude must follow `AGENTS.md` first, including the Instruction Hierarchy, Required Change Workflow, document update rules, Testing and Verification, Completion Checklist, and Final Response Expectations in that file. This overlay only adds what is specific to Claude Code and does not restate `AGENTS.md`.
+> Follow `AGENTS.md` first. This overlay adds only what is specific to Claude Code and does not restate `AGENTS.md`.
 
 ---
 
-## 1. Skill Invocation (Claude-specific)
+## 1. Skill Invocation
 
-Before reading the governance documents, invoke `/spec-driven-development` to load the development skill.
+Before reading the governance documents, invoke `/spec-driven-development`. It is installed in `.claude/skills/`.
 
-When asked to set up Spec-Driven Docs in another repository, invoke `/spec-driven-docs-setup` instead. That skill includes steps to install both skills in the target repo — complete those steps.
+When asked to set up Spec-Driven Docs in another repository, invoke `/spec-driven-docs-setup` instead and complete its installation steps in the target repo.
+
+The SessionStart hook (`.claude/hooks/session-start.sh`) prints the latest changelog handover, active decision records, and open proposals. Treat that output as context to act on, not as a substitute for loading the skill.
 
 ---
 
 ## 2. Claude Changelog Name
 
-Use the standardized identity format and body template from `AGENTS.md` Section 10.
-
-When Claude updates `CHANGELOG.md`, use this agent name unless the maintainer requests another:
+Use the changelog entry format from the `spec-driven-development` skill with this agent name unless the maintainer requests another:
 
 ```text
 Agent: Claude Code (Claude)
@@ -28,7 +28,7 @@ Agent: Claude Code (Claude)
 
 ## 3. Claude-Specific Cautions
 
-Beyond `AGENTS.md`, Claude should be especially careful to avoid:
+Be especially careful to avoid:
 
 - Overconfident claims without validation
 - Treating AI-generated reasoning as evidence
@@ -39,11 +39,4 @@ Beyond `AGENTS.md`, Claude should be especially careful to avoid:
 
 ## 4. Custom Claude Instructions
 
-- Invoke `/spec-driven-development` at the start of each development session in this repo, before reading the governance documents; invoke `/spec-driven-docs-setup` when asked to set up Spec-Driven Docs elsewhere.
-- Commands, important paths, and known gotchas are maintained once, in `AGENTS.md` Section 19 — do not duplicate them here.
-
----
-
-## Final Principle
-
-Claude should leave the repository easier for the next human or agent to understand. Small, accurate, well-documented changes are better than broad, clever, poorly grounded rewrites.
+- Commands, paths, and gotchas are maintained once, in `AGENTS.md` — do not duplicate them here.

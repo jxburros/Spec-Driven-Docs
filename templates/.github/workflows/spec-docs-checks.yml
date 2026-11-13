@@ -1,0 +1,29 @@
+name: Spec-Driven Docs checks
+
+# Fails a pull request that changes files without adding a CHANGELOG.md entry.
+# Shell only; no dependencies. Delete this workflow if you do not want the gate.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  changelog-entry:
+    name: Changelog entry present
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require a new dated CHANGELOG.md entry
+        env:
+          BASE_REF: origin/${{ github.base_ref }}
+        run: |
+          if git diff "$BASE_REF...HEAD" -- CHANGELOG.md | grep -Eq '^\+## [0-9]{4}-[0-9]{2}-[0-9]{2} '; then
+            echo "CHANGELOG.md entry found."
+          else
+            echo "::error::This pull request adds no dated entry to CHANGELOG.md. Add one in the format defined by the spec-driven-development skill."
+            exit 1
+          fi

@@ -1,6 +1,136 @@
 # CHANGELOG
 
 
+## 2026-11-13 — Agent: Claude Code (Claude)
+
+### Changed
+- Bumped the version from `0.0.0` to `0.1.0` in `package.json` and `package-lock.json`. The maintainer chose a minor bump for pull request #31 (decision log, rule IDs, proposals, CI checks, session hook, templates split from live governance, adopter-first README, P-0001).
+- `development-docs/productRoadmap.md`: current version updated; the open question about a first versioned release now asks only what `1.0.0` should contain.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: `npm test` passes locally with `BASE_REF=origin/main`.
+- No git tag was created; tagging was not requested.
+
+### Handover
+- Next agent should start with: `AGENTS.md`.
+- Open questions: the `HC-3` wording; the open questions in `development-docs/productRoadmap.md`.
+- Risks or assumptions: none.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
+- Implemented P-0001 (approved by the maintainer): removed this repository's own instances of the operational records from the root — `features.md`, `newFeatures.md`, `current-checklist/`, `audits/`, `human-qa/`, `development-docs/research/`, `development-docs/design.json`. Their templates under `templates/` are unchanged. The root is now `README.md`, `templates/`, `skills/`, `guides/`, plus a small self-governance set.
+- `AGENTS.md`: removed those paths, the `features.md` rule, and `design.json` from the hierarchy and read-before table; added a rule not to recreate the records at the root.
+- `development-docs/architecture.md`, `developmentManifesto.md`, `coreIdentity.md`: updated the directory map, live-governance description, Definition of Done, and the operational-records concept to match.
+- `development-docs/productRoadmap.md`: shortened to current state, rejected directions, and open questions; added "growing this repository's own process" as a rejected direction, per the maintainer's stated direction.
+- `tests/docs-smoke.test.mjs`: the live-set test no longer expects the removed paths; a new test fails if any of them reappears at the root or goes missing from `templates/`.
+- P-0001 marked Implemented and moved to `development-docs/architecture-plans/archives/`.
+
+### Not completed
+- None for P-0001.
+- Still open from earlier entries: `HC-3` wording, version bump decision.
+
+### Notes
+- Validation: `npm test` passes (13 of 13 with `BASE_REF=origin/main`); the session hook runs and reports no open proposals.
+- P-0001's open choices were resolved with its recommendations: delete `features.md`, keep the four live documents, no `examples/` folder.
+- No decision records.
+
+### Handover
+- Next agent should start with: `AGENTS.md`.
+- Open questions: those in `development-docs/productRoadmap.md`, plus the `HC-3` wording.
+- Risks or assumptions: none.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
+- Fixed the session hook (`.claude/hooks/session-start.sh` and its copy in `templates/.claude/`): it reported "Open proposals: None" while P-0001 was Proposed, because a `|` alternation held in a shell variable is not honored by `case`. Status matching now uses `grep -E`.
+
+### Not completed
+- None.
+
+### Notes
+- Validation: ran the hook with P-0001 present (listed), and with a temporary Active decision record and an Approved proposal (both listed); `npm test` passes.
+- The earlier hook check on this date only exercised the single-pattern decision-record path, which is why the defect was missed.
+
+### Handover
+- Next agent should start with: P-0001; implement only if its status is Approved.
+- Open questions: unchanged from the previous entry.
+- Risks or assumptions: none.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
+- Reoriented the repository toward adopters, at the maintainer's request: it should read as templates and instructions for adding the system to another repository, not as a project about developing itself.
+- `README.md` rewritten adopter-first: what you get, two ways to add it to your repository (a paste-ready agent instruction, or three copy commands), a "where to look" table by reader, and a single short section on contributing here.
+- `docs/index.html` text now describes adoption instead of this repository's own documents.
+- `development-docs/coreIdentity.md`: primary audience is stated as outside this repository; added "Not a project about developing itself" to What This Project Is Not.
+- `development-docs/developmentManifesto.md`: added "Adopters first" as the first development principle.
+- `AGENTS.md`: banner sending adopters to `README.md` and `templates/AGENTS.md`; Project Summary now names `templates/`, `skills/`, and `guides/` as the product and tells agents to keep this repo's own process small.
+- `skills/README.md`: removed a maintenance note about this repo's installed copy (it is in `AGENTS.md`).
+- Drafted `development-docs/architecture-plans/P-0001-trim-self-governance.md` (status Proposed).
+
+### Not completed
+- P-0001 is not implemented. It removes this repository's own operational-record instances from the root; that deletes files and changes structure, so it waits for maintainer approval.
+- Open items from the previous entry are unchanged (HC-3 wording, roadmap direction, version bump).
+
+### Notes
+- Validation: `npm test` and `BASE_REF=origin/main npm test` pass.
+- The agent instruction in the README assumes the repository is reachable at `https://github.com/jxburros/Spec-Driven-Docs`; this was not verified from an outside machine.
+- Proposal created: P-0001. No decision records.
+
+### Handover
+- Next agent should start with: P-0001; implement only if its status is Approved.
+- Open questions: the three open choices in P-0001.
+- Risks or assumptions: none beyond the above.
+
+---
+
+## 2026-11-12 — Agent: Claude Code (Claude)
+
+### Changed
+Implemented the eight changes from the system review, at the maintainer's request. The goal of all eight: every rule is either followed or overridden by a recorded decision, and what can be checked mechanically is checked.
+
+1. **Decision log.** Added `development-docs/decisions/` with `TEMPLATE.md` and `archives/`. An approved deviation from a rule is written as `D-NNNN-title.md` before implementation, naming the rule, scope, approving maintainer, and review date.
+2. **Rule IDs.** Hard Constraints are now `HC-n` (`coreIdentity.md`) and Architectural Invariants `INV-n` (`architecture.md`), in both the templates and this repo's live docs.
+3. **CI and tests.** Added `.github/workflows/docs-checks.yml` (runs `npm test` on every pull request). Extended the suite to check: template set complete, live docs free of placeholders (INV-1), installed copies identical to source (INV-2), skill/guide path parity (INV-3), no dependencies (INV-4), `AGENTS.md` ≤ 200 lines (INV-5), numbered sections unique and ascending (INV-6), decision-record and proposal format (INV-7), and a new changelog entry relative to a base ref (INV-8, `tests/changelog-entry.test.mjs`).
+4. **Session hook and installed skills.** Added `.claude/settings.json` and `.claude/hooks/session-start.sh` (read-only; prints the skill reminder, active decision records, open proposals, and the latest changelog handover). Installed both skills in `.claude/skills/`, so `/spec-driven-development` now exists in this repo.
+5. **Short `AGENTS.md`.** Cut from 436 to about 150 lines: hierarchy, read-before table, stop-and-ask gates, repo rules, commands, paths, gotchas. Procedures moved to the `spec-driven-development` skill; generic safety, AI-behavior, and code-style advice was removed because the manifesto owns those topics. The hierarchy and read-before table are no longer restated in the skill or the AI guide.
+6. **Manifesto contradictions.** The template manifesto now has one Definition of Done (the appended duplicate "## 7" and "## 8" sections are gone), one changelog format (the `[OpenAI Codex]`-style prefixes are gone), and a generic per-agent section instead of three near-identical ones.
+7. **Templates separated from live governance.** Templates moved to `templates/`, laid out as they should land in a target repo, and now include `AGENTS.md`, overlays, a starter `CHANGELOG.md`, record templates, the session hook, and a shell-only changelog CI check. `development-docs/` now holds real, filled-in governance for this repo.
+8. **Proposals.** `development-docs/architecture-plans/` now holds per-change proposals (`P-NNNN-title.md`, from `TEMPLATE.md`). "Ask before creating a plan" is replaced by "draft the proposal, then wait for approval"; proposals are archived when implemented or rejected.
+
+Also updated both skills, both guides, `README.md`, `skills/README.md`, both overlays, and `features.md` to match.
+
+### Not completed
+- `development-docs/productRoadmap.md` sections "Current Version Focus" and "Planned Future Versions" are left blank with comments: only the maintainer can state direction.
+- `development-docs/coreIdentity.md` has comment-marked gaps for secondary audiences and further anti-goals, for the same reason.
+- No version bump was made and no pull request was opened; the maintainer has not been asked about a bump yet.
+- `docs/index.html` (paused project page) was not reviewed against the new layout.
+
+### Notes
+- Validation: `npm test` passes (12 pass, 1 skipped without `BASE_REF`); `BASE_REF=origin/main npm test` passes after commit. Each new gate was also made to fail on purpose (guide missing a path, drifted installed skill, malformed decision record) and failed as expected. The hook was run by hand and lists an Active record when one exists.
+- Not validated: the two GitHub Actions workflows have not run on GitHub yet; they will first run on the next pull request.
+- The live `HC-1`…`HC-5` restate the five "Non-Negotiable Project Values" from the previous `AGENTS.md`. One wording change needs maintainer confirmation: `HC-3` ("No application runtime") now explicitly permits the zero-dependency test suite, CI workflows, and agent session hooks, because items 3 and 4 add those. The previous wording was "do not add build steps, application infrastructure, or runtime configuration".
+- `INV-3` (skill/guide parity) compares which governance paths each file names. It catches a side that stops mentioning something; it cannot catch two texts that give different advice.
+- No decision records or proposals were created.
+- The folder name `architecture-plans/` was kept for proposals to avoid renaming a path that every document references.
+
+### Handover
+- Next agent should start with: the session-hook output, then `AGENTS.md`.
+- Open questions: confirm the `HC-3` wording; fill the roadmap's current version focus and rejected directions; decide whether `0.0.0` should be bumped for this change; the open product questions in `development-docs/productRoadmap.md`.
+- Risks or assumptions: adopters who copied the old root-level templates have a different layout (old `AGENTS.md` section numbers, no `decisions/`); the guides describe the new layout only. Parallel branches that each add a top changelog entry will conflict on merge.
+
+---
+
 ## 2026-08-11 — Agent: Claude Code (Claude)
 
 ### Changed
